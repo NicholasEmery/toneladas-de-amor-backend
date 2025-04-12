@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Editor e sistema
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Build e saída de logs
+dist/
+coverage/
+*.log
+logs/
+*.tsbuildinfo
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Docker
+docker-compose.override.yml
+
+# Configurações específicas do NestJS
+tmp/
+.cache/
+
+# PM2
+npm2*.log
+dump.pm2*
+
+# Prisma
+prisma/migrations/
