@@ -64,7 +64,7 @@ export class EmailVerificationService {
         expiresOtpAt: null,
       },
     });
-    
+
     return {
       emailVerified: updatedUser.emailVerified,
       success: 'Email verified successfully',

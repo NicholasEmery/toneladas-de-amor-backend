@@ -9,7 +9,9 @@ describe('EmailResetPasswordController', () => {
       controllers: [EmailResetPasswordController],
     }).compile();
 
-    controller = module.get<EmailResetPasswordController>(EmailResetPasswordController);
+    controller = module.get<EmailResetPasswordController>(
+      EmailResetPasswordController,
+    );
   });
 
   it('should be defined', () => {

@@ -1,4 +1,4 @@
-import { User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser, Role } from '@prisma/client';
 
 export class User implements PrismaUser {
   id: string;
@@ -11,5 +11,5 @@ export class User implements PrismaUser {
   createdAt: Date;
   updatedAt: Date;
   tokenVersion: number;
-  role: string;
+  role: Role;
 }

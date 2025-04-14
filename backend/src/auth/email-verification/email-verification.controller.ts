@@ -4,7 +4,6 @@ import {
   Body,
   HttpCode,
   Request,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { EmailVerificationService } from './email-verification.service';
 import { SendOtpDto } from './dto/sendOtp.dto';
@@ -19,7 +18,6 @@ export class EmailVerificationController {
   @Post('send/otp')
   @HttpCode(200)
   async sendOTP(
-    @Request() req,
     @Body() sendOtpDto: SendOtpDto,
   ): Promise<{ sucess: string; statusCode: number }> {
     await this.emailVerificationService.sendOtp(sendOtpDto.email);
@@ -35,9 +33,9 @@ export class EmailVerificationController {
   async verifyOTP(
     @Body() verifyOptDto: VerifyOptDto,
   ): Promise<{ emailVerified: boolean }> {
-    
     return await this.emailVerificationService.verifyOtp(
-      verifyOptDto.otp, verifyOptDto.email,
+      verifyOptDto.otp,
+      verifyOptDto.email,
     );
   }
 }

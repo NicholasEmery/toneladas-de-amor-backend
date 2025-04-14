@@ -6,6 +6,6 @@ import { DatabaseModule } from 'src/database/database.module';
 @Module({
   imports: [DatabaseModule],
   providers: [EmailResetPasswordService],
-  controllers: [EmailResetPasswordController]
+  controllers: [EmailResetPasswordController],
 })
 export class EmailResetPasswordModule {}

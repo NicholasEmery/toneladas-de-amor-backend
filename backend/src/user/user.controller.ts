@@ -7,12 +7,13 @@ import {
   Patch,
   Post,
   UseGuards,
-  ValidationPipe,
   HttpCode,
 } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+// import { RolesGuard } from 'src/auth/roles.guard';
+// import { Roles } from 'src/auth/roles.decorator';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
@@ -24,7 +25,7 @@ export class UserController {
   @HttpCode(201)
   async signupUser(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<{email: string, success: string, statusCode: number}> {
+  ): Promise<{ email: string; success: string; statusCode: number }> {
     const user = await this.userService.createUser(createUserDto);
     // Envia a resposta manualmente
     return {
@@ -70,7 +71,9 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Delete('delete')
   @HttpCode(200)
-  async deleteUser(@Request() req): Promise<{ success: string, statusCode: number }> {
+  async deleteUser(
+    @Request() req,
+  ): Promise<{ success: string; statusCode: number }> {
     const cookie = req.cookies['access_token'];
     await this.userService.deleteUser(cookie);
 

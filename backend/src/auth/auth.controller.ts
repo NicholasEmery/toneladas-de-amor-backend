@@ -18,10 +18,7 @@ export class AuthController {
 
   @Post('signin')
   @HttpCode(200)
-  async signin(
-    @Body() data: SignInDto,
-    @Res() res: Response,
-  ) {
+  async signin(@Body() data: SignInDto, @Res() res: Response) {
     const { access_token } = await this.authService.signin(data);
 
     // Configura o cookie com o access_token
@@ -53,7 +50,7 @@ export class AuthController {
 
     res.send({
       message: 'Logged out successfully',
-      statusCode: 200
+      statusCode: 200,
     });
   }
 }

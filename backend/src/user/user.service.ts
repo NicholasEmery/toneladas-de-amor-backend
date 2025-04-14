@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -29,7 +29,12 @@ export class UserService {
     });
   }
 
-  async createUser(data: { email: string, name: string, password: string, role: string }): Promise<User> {
+  async createUser(data: {
+    email: string;
+    name: string;
+    password: string;
+    role: Role;
+  }): Promise<User> {
     // Verifica se o usuário já existe
     const user = await this.prisma.user.findUnique({
       where: { email: data.email },
@@ -102,7 +107,7 @@ export class UserService {
   }
 
   async deleteUser(cookie: string) {
-    const payload = this.jwtService.verify(cookie, { 
+    const payload = this.jwtService.verify(cookie, {
       secret: process.env.SECRET_KEY,
     });
     const userId = payload.sub;

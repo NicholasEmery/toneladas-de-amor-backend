@@ -16,16 +16,18 @@ export class AuthService {
   @Inject()
   private readonly jwtService: JwtService;
 
-  async signin(
-    params: { email: string; password: string },
-  ): Promise<{ access_token: string; }> {
+  async signin(params: {
+    email: string;
+    password: string;
+  }): Promise<{ access_token: string }> {
     const user = await this.prisma.user.findUnique({
       where: { email: params.email },
     });
     if (!user) throw new NotFoundException('User not found');
     const passwordMatch = await bcrypt.compare(params.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException('Invalid credentials');
-    if (user.emailVerified === false) throw new UnauthorizedException('Email not verified');
+    if (user.emailVerified === false)
+      throw new UnauthorizedException('Email not verified');
     const payload = { sub: user.id, version: user.tokenVersion };
     const access_token = await this.jwtService.signAsync(payload, {
       expiresIn: '30d', // Tempo de expiração do access token
@@ -41,7 +43,7 @@ export class AuthService {
     const userId = payload.sub; // Obtém o ID do usuário a partir do payload do token
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-    })
+    });
 
     if (!user) throw new NotFoundException('User not found');
 
