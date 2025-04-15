@@ -41,7 +41,7 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({
-    default: 'admin',
+    default: 'ADMIN',
     description: 'Cargo do usuário',
   })
   @IsNotEmpty()
