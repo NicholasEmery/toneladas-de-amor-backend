@@ -10,7 +10,9 @@ import {
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags,  } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   @Inject()
@@ -18,6 +20,9 @@ export class AuthController {
 
   @Post('signin')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Login de usuário' })
+  @ApiBody({ type: SignInDto })
+  @ApiResponse({status: 200, example: { message: 'Usuário autenticado com sucesso.', statusCode: 200 }})
   async signin(@Body() data: SignInDto, @Res() res: Response) {
     const { access_token } = await this.authService.signin(data);
 
