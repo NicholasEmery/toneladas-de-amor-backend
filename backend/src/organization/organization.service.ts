@@ -13,11 +13,13 @@ import { Organization } from '@prisma/client';
 export class OrganizationService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createOrganizationDto: CreateOrganizationDto, adminId: string) {
+  async create(createOrganizationDto: CreateOrganizationDto, userId: string) {
     return await this.prisma.organization.create({
       data: {
         ...createOrganizationDto,
-        adminId, // Usa o adminId extraído do token
+        admin: {
+          connect: { id: userId }, // Usa o userId extraído do token
+        },
       },
     });
   }

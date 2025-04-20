@@ -3,7 +3,7 @@ import {
   Post,
   Get,
   Body,
-  Req,
+  Request,
   UseGuards,
   Delete,
   Patch,
@@ -11,7 +11,6 @@ import {
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/createOrganization.dto';
 import { UpdateOrganizationDto } from './dto/updateOrganization.dto';
-import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller()
@@ -22,16 +21,16 @@ export class OrganizationController {
   @Post('organization/create')
   async createOrganization(
     @Body() createOrganizationDto: CreateOrganizationDto,
-    @Req() req: Request,
+    @Request() req,
   ) {
-    const userId = req['userId']; // Obtém o userId do middleware
+    const userId = req.user.id;
     return await this.organizationService.create(createOrganizationDto, userId);
   }
 
   @UseGuards(AuthGuard)
   @Get('organizations')
-  async getOrganization(req: Request) {
-    const userId = req['userId']; // Obtém o userId do middleware
+  async getOrganization(@Request() req) {
+    const userId = req.user.id;
     return await this.organizationService.getOrganizations(userId);
   }
 
@@ -45,9 +44,9 @@ export class OrganizationController {
   @Patch('organization/update')
   async updateOrganization(
     @Body() updateOrganizationDto: UpdateOrganizationDto,
-    @Req() req: Request,
+    @Request() req,
   ) {
-    const userId = req['userId']; // Obtém o userId do middleware
+    const userId = req.user.id;
     return await this.organizationService.update(updateOrganizationDto, userId);
   }
 

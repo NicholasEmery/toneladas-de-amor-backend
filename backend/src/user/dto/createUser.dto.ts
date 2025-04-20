@@ -47,5 +47,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @IsAlpha()
+  @Matches(/^[A-Z]*$/, {
+    message: 'Role must only contain uppercase letters',
+  })
   role: Role;
 }

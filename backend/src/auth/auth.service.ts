@@ -37,19 +37,23 @@ export class AuthService {
   }
 
   async logout(cookie: string) {
-    const payload = this.jwtService.verify(cookie, {
-      secret: process.env.SECRET_KEY,
-    }); // Verifica e decodifica o token JWT
-    const userId = payload.sub; // Obtém o ID do usuário a partir do payload do token
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
+    try {
+      const payload = this.jwtService.verify(cookie, {
+        secret: process.env.SECRET_KEY,
+      }); // Verifica e decodifica o token JWT
+      const userId = payload.sub; // Obtém o ID do usuário a partir do payload do token
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
 
-    if (!user) throw new NotFoundException('User not found');
+      if (!user) throw new NotFoundException('User not found');
 
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { tokenVersion: { increment: 1 } },
-    });
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: { tokenVersion: { increment: 1 } },
+      });
+    } catch (error) { 
+      throw new UnauthorizedException('Invalid token or expired');
+    }
   }
 }
