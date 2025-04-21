@@ -10,7 +10,7 @@ import {
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags,  } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -22,7 +22,34 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Login de usuário' })
   @ApiBody({ type: SignInDto })
-  @ApiResponse({status: 200, example: { message: 'Usuário autenticado com sucesso.', statusCode: 200 }})
+  @ApiResponse({
+    status: 200,
+    example: { message: 'Usuário autenticado com sucesso.', statusCode: 200 },
+  })
+  @ApiResponse({
+    status: 400,
+    example: {
+      message: 'Dados não podem ser enviados vazios',
+      error: 'Bad Request',
+      statusCode: 400,
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    example: {
+      message: 'Credenciais inválidas',
+      error: 'Unauthorized',
+      statusCode: 401,
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    example: {
+      message: 'Usuário não existe',
+      error: 'Not Found',
+      statusCode: 404,
+    },
+  })
   async signin(@Body() data: SignInDto, @Res() res: Response) {
     const { access_token } = await this.authService.signin(data);
 
@@ -39,7 +66,7 @@ export class AuthController {
       statusCode: 200,
     });
   }
-
+  
   @Post('logout')
   @HttpCode(200)
   async logout(@Req() req, @Res() res: Response) {
