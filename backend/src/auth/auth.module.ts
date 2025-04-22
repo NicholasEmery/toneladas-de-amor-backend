@@ -1,11 +1,11 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { UserModule } from 'src/user/user.module';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from './auth.guard';
-import { DatabaseModule } from 'src/database/database.module';
-import { EmailResetPasswordModule } from './email-reset-password/email-reset-password.module';
+import { forwardRef, Module } from "@nestjs/common";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { UserModule } from "src/user/user.module";
+import { JwtModule } from "@nestjs/jwt";
+import { AuthGuard } from "./auth.guard";
+import { DatabaseModule } from "src/database/database.module";
+import { EmailResetPasswordModule } from "./email-reset-password/email-reset-password.module";
 
 @Module({
   imports: [
@@ -13,8 +13,8 @@ import { EmailResetPasswordModule } from './email-reset-password/email-reset-pas
     forwardRef(() => UserModule),
     JwtModule.register({
       global: true,
-      secret: process.env.SECRET_KEY || '',
-      signOptions: { expiresIn: '86400s' },
+      secret: process.env.SECRET_KEY || "",
+      signOptions: { expiresIn: "86400s" },
     }),
     EmailResetPasswordModule,
   ],

@@ -1,43 +1,43 @@
-import { Body, Controller, HttpCode, Post, Res, Request } from '@nestjs/common';
-import { Response } from 'express';
-import { AuthService } from './auth.service';
-import { SignInDto } from './dto/signIn.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpCode, Post, Res, Request } from "@nestjs/common";
+import { Response } from "express";
+import { AuthService } from "./auth.service";
+import { SignInDto } from "./dto/signIn.dto";
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-@ApiTags('Auth')
-@Controller('auth')
+@ApiTags("Auth")
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signin')
+  @Post("signin")
   @HttpCode(200)
-  @ApiOperation({ summary: 'Login de usuário' })
+  @ApiOperation({ summary: "Login de usuário" })
   @ApiBody({ type: SignInDto })
   @ApiResponse({
     status: 200,
-    example: { message: 'Usuário autenticado com sucesso.', statusCode: 200 },
+    example: { message: "Usuário autenticado com sucesso.", statusCode: 200 },
   })
   @ApiResponse({
     status: 400,
     example: {
-      message: 'Dados não podem ser enviados vazios',
-      error: 'Bad Request',
+      message: "Dados não podem ser enviados vazios",
+      error: "Bad Request",
       statusCode: 400,
     },
   })
   @ApiResponse({
     status: 401,
     example: {
-      message: 'Credenciais inválidas',
-      error: 'Unauthorized',
+      message: "Credenciais inválidas",
+      error: "Unauthorized",
       statusCode: 401,
     },
   })
   @ApiResponse({
     status: 404,
     example: {
-      message: 'Usuário não existe',
-      error: 'Not Found',
+      message: "Usuário não existe",
+      error: "Not Found",
       statusCode: 404,
     },
   })
@@ -45,34 +45,34 @@ export class AuthController {
     const { access_token } = await this.authService.signin(data);
 
     // Configura o cookie com o access_token
-    res.cookie('access_token', access_token, {
+    res.cookie("access_token", access_token, {
       httpOnly: true, // Impede acesso ao cookie via JavaScript
       // secure: true, // Garante que o cookie só será enviado em conexões HTTPS
-      sameSite: 'strict', // Protege contra ataques CSRF
+      sameSite: "strict", // Protege contra ataques CSRF
       maxAge: 30 * 24 * 60 * 60 * 1000, // Expira em 30 dias
     });
 
     res.send({
-      message: 'Usuário autenticado com sucesso.',
+      message: "Usuário autenticado com sucesso.",
       statusCode: 200,
     });
   }
 
-  @Post('logout')
+  @Post("logout")
   @HttpCode(200)
   async logout(@Request() req: any, @Res() res: Response) {
-    const cookie = req.cookies['access_token']; // Obtém o token JWT do cookie
+    const cookie = req.cookies["access_token"]; // Obtém o token JWT do cookie
 
     await this.authService.logout(cookie); // Chama o serviço de logout
 
     // Remove o cookie de autenticação
-    res.clearCookie('access_token', {
+    res.clearCookie("access_token", {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: "strict",
     });
 
     res.send({
-      message: 'Logged out successfully',
+      message: "Logged out successfully",
       statusCode: 200,
     });
   }

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import { Injectable } from "@nestjs/common";
+import * as nodemailer from "nodemailer";
 
 @Injectable()
 export class MailServiceVerifiedEmail {
@@ -13,7 +13,7 @@ export class MailServiceVerifiedEmail {
 
     if (!host || !port || !user || !pass) {
       throw new Error(
-        'Configurações de e-mail não estão definidas no ambiente.',
+        "Configurações de e-mail não estão definidas no ambiente.",
       );
     }
 
@@ -32,7 +32,7 @@ export class MailServiceVerifiedEmail {
     const mailOptions = {
       from: process.env.EMAIL_USER, // Remetente
       to, // Destinatário
-      subject: 'Seu código de verificação', // Assunto do e-mail
+      subject: "Seu código de verificação", // Assunto do e-mail
       text: `Seu código de verificação é: ${otp}`, // Corpo do e-mail
     };
 

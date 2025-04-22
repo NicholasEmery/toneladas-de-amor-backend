@@ -1,10 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class SendOtpDto {
   @ApiProperty({
-    default: 'example@gmail.com',
-    description: 'Email do usuário',
+    default: "example@gmail.com",
+    description: "Email do usuário",
   })
   @IsString()
   @IsEmail()

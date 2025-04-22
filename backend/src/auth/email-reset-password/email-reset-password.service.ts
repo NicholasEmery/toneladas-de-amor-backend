@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-import * as bycript from 'bcrypt';
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "src/database/prisma.service";
+import { JwtService } from "@nestjs/jwt";
+import * as bycript from "bcrypt";
 
 @Injectable()
 export class EmailResetPasswordService {
@@ -15,11 +15,11 @@ export class EmailResetPasswordService {
       where: { email: email },
     });
 
-    if (!user) throw new NotFoundException('Usuário não encontrado');
+    if (!user) throw new NotFoundException("Usuário não encontrado");
 
     const resetPasswordToken = await this.jwtService.signAsync(
       { sub: user.id },
-      { secret: process.env.SECRET_KEY, expiresIn: '15m' }, // Token de reset de senha com expiração de 15 minutos
+      { secret: process.env.SECRET_KEY, expiresIn: "15m" }, // Token de reset de senha com expiração de 15 minutos
     );
 
     return { resetPasswordToken };
@@ -34,7 +34,7 @@ export class EmailResetPasswordService {
       where: { id: userId },
     });
 
-    if (!user) throw new NotFoundException('Usuário não encontrado');
+    if (!user) throw new NotFoundException("Usuário não encontrado");
 
     const newPassword = await bycript.hash(password, 10);
 

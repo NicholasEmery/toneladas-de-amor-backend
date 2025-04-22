@@ -1,15 +1,15 @@
-import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
-import { EmailResetPasswordService } from './email-reset-password.service';
-import { SendEmailDto } from './dto/sendEmail.dto';
-import { VerifyTokenDto } from './dto/verifyToken.dto';
+import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
+import { EmailResetPasswordService } from "./email-reset-password.service";
+import { SendEmailDto } from "./dto/sendEmail.dto";
+import { VerifyTokenDto } from "./dto/verifyToken.dto";
 
-@Controller('auth/reset/password')
+@Controller("auth/reset/password")
 export class EmailResetPasswordController {
   constructor(
     private readonly emailResetPasswordService: EmailResetPasswordService,
   ) {}
 
-  @Post('send/email')
+  @Post("send/email")
   @HttpCode(200)
   async sendEmail(
     @Body() sendEmailDto: SendEmailDto,
@@ -19,20 +19,20 @@ export class EmailResetPasswordController {
       sendEmailDto.email,
     );
 
-    res.cookie('resetPasswordToken', resetPasswordToken, {
+    res.cookie("resetPasswordToken", resetPasswordToken, {
       httpOnly: true,
       // secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 15 * 60 * 1000, // 15 minutos
     });
 
     return {
-      success: 'Email enviado com sucesso.',
+      success: "Email enviado com sucesso.",
       statusCode: 200,
     };
   }
 
-  @Post('verify/token')
+  @Post("verify/token")
   @HttpCode(200)
   async verifyToken(
     @Body() verifyTokenDto: VerifyTokenDto,
@@ -43,7 +43,7 @@ export class EmailResetPasswordController {
     );
 
     return {
-      success: 'Senha alterada com sucesso.',
+      success: "Senha alterada com sucesso.",
       statusCode: 200,
     };
   }

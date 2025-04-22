@@ -4,9 +4,9 @@ import {
   Inject,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/database/prisma.service';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { PrismaService } from "src/database/prisma.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,10 +17,10 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const cookie = request.cookies['access_token'];
+    const cookie = request.cookies["access_token"];
 
     if (!cookie) {
-      throw new UnauthorizedException('Access token is missing');
+      throw new UnauthorizedException("Access token is missing");
     }
 
     try {
@@ -33,11 +33,11 @@ export class AuthGuard implements CanActivate {
       });
 
       if (!user) {
-        throw new UnauthorizedException('User does not exist');
+        throw new UnauthorizedException("User does not exist");
       }
 
       if (user.tokenVersion !== payload.version) {
-        throw new UnauthorizedException('Token Invalidated');
+        throw new UnauthorizedException("Token Invalidated");
       }
 
       // Attach user to request for further use
@@ -45,10 +45,10 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (error: any) {
-      if (error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('Token has expired');
+      if (error.name === "TokenExpiredError") {
+        throw new UnauthorizedException("Token has expired");
       }
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException("Invalid token");
     }
   }
 }

@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { EmailResetPasswordController } from './email-reset-password.controller';
+import { Test, TestingModule } from "@nestjs/testing";
+import { EmailResetPasswordController } from "./email-reset-password.controller";
 
-describe('EmailResetPasswordController', () => {
+describe("EmailResetPasswordController", () => {
   let controller: EmailResetPasswordController;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('EmailResetPasswordController', () => {
     );
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

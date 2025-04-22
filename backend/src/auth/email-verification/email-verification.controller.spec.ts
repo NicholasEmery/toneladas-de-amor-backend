@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { EmailVerificationController } from './email-verification.controller';
-import { EmailVerificationService } from './email-verification.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { EmailVerificationController } from "./email-verification.controller";
+import { EmailVerificationService } from "./email-verification.service";
 
-describe('EmailVerificationController', () => {
+describe("EmailVerificationController", () => {
   let controller: EmailVerificationController;
 
   beforeEach(async () => {
@@ -16,7 +16,7 @@ describe('EmailVerificationController', () => {
     );
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

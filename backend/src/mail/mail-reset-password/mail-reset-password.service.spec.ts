@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MailResetPasswordService } from './mail-reset-password.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { MailResetPasswordService } from "./mail-reset-password.service";
 
-describe('MailResetPasswordService', () => {
+describe("MailResetPasswordService", () => {
   let service: MailResetPasswordService;
 
   beforeEach(async () => {
@@ -12,7 +12,7 @@ describe('MailResetPasswordService', () => {
     service = module.get<MailResetPasswordService>(MailResetPasswordService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

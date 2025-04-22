@@ -1,6 +1,6 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
-import { MailServiceVerifiedEmail } from 'src/mail/mail-otp/mail-verified-email.service';
+import { Injectable, Inject, BadRequestException } from "@nestjs/common";
+import { PrismaService } from "src/database/prisma.service";
+import { MailServiceVerifiedEmail } from "src/mail/mail-otp/mail-verified-email.service";
 
 @Injectable()
 export class EmailVerificationService {
@@ -18,7 +18,7 @@ export class EmailVerificationService {
     });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException("User not found");
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Gera um OTP de 6 dígitos
@@ -48,19 +48,19 @@ export class EmailVerificationService {
     });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException("User not found");
     }
 
     if (otp !== user.otp) {
-      throw new BadRequestException('Invalid OTP');
+      throw new BadRequestException("Invalid OTP");
     }
 
     if (user.expiresOtpAt === null) {
-      throw new BadRequestException('OTP não possui data de expiração');
+      throw new BadRequestException("OTP não possui data de expiração");
     }
 
     if (new Date() > user.expiresOtpAt) {
-      throw new BadRequestException('OTP expired');
+      throw new BadRequestException("OTP expired");
     }
 
     const updatedUser = await this.prisma.user.update({
@@ -74,7 +74,7 @@ export class EmailVerificationService {
 
     return {
       emailVerified: updatedUser.emailVerified,
-      success: 'Email verified successfully',
+      success: "Email verified successfully",
       statusCode: 200,
     };
   }

@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/database/prisma.service';
+} from "@nestjs/common";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
+import { PrismaService } from "src/database/prisma.service";
 
 @Injectable()
 export class AuthService {
@@ -22,14 +22,14 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: params.email },
     });
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException("User not found");
     const passwordMatch = await bcrypt.compare(params.password, user.password);
-    if (!passwordMatch) throw new UnauthorizedException('Invalid credentials');
+    if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
     if (user.emailVerified === false)
-      throw new UnauthorizedException('Email not verified');
+      throw new UnauthorizedException("Email not verified");
     const payload = { sub: user.id, version: user.tokenVersion };
     const access_token = await this.jwtService.signAsync(payload, {
-      expiresIn: '30d', // Tempo de expiração do access token
+      expiresIn: "30d", // Tempo de expiração do access token
     });
 
     return { access_token };
@@ -45,14 +45,14 @@ export class AuthService {
         where: { id: userId },
       });
 
-      if (!user) throw new NotFoundException('User not found');
+      if (!user) throw new NotFoundException("User not found");
 
       await this.prisma.user.update({
         where: { id: userId },
         data: { tokenVersion: { increment: 1 } },
       });
     } catch (error) {
-      throw new UnauthorizedException('Invalid token or expired');
+      throw new UnauthorizedException("Invalid token or expired");
     }
   }
 }

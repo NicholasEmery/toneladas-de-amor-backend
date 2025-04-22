@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Prisma, Role, User } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma.service';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { Inject, Injectable } from "@nestjs/common";
+import { Prisma, Role, User } from "@prisma/client";
+import { PrismaService } from "src/database/prisma.service";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class UserService {
@@ -13,7 +13,7 @@ export class UserService {
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<Omit<User, 'password' | 'otp' | 'expiresOtpAt' | 'role'> | null> {
+  ): Promise<Omit<User, "password" | "otp" | "expiresOtpAt" | "role"> | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
       select: {
@@ -40,7 +40,7 @@ export class UserService {
     });
 
     if (user) {
-      throw new Error('Usuário já existe com esse email.');
+      throw new Error("Usuário já existe com esse email.");
     }
 
     const hashPassword = await bcrypt.hash(data.password, 10);
@@ -54,18 +54,18 @@ export class UserService {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
   }): Promise<{
-    user: Omit<User, 'password' | 'otp' | 'expiresOtpAt' | 'createdAt'>;
+    user: Omit<User, "password" | "otp" | "expiresOtpAt" | "createdAt">;
     message: string;
     statusCode: number;
   }> {
     const { where, data } = params;
 
     let successMessage: string;
-    successMessage = 'Dados atualizados com sucesso.';
+    successMessage = "Dados atualizados com sucesso.";
 
     if (data.password) {
       if (Object.keys(data).length === 1 && data.password) {
-        successMessage = 'Senha atualizada com sucesso. Faça login novamente.';
+        successMessage = "Senha atualizada com sucesso. Faça login novamente.";
       }
       data.password = await bcrypt.hash(data.password as string, 10);
       data.tokenVersion = { increment: 1 };
@@ -74,7 +74,7 @@ export class UserService {
     if (data.email) {
       if (Object.keys(data).length === 1 && data.email) {
         successMessage =
-          'Email atualizado com sucesso. Status de verificação redefinido.';
+          "Email atualizado com sucesso. Status de verificação redefinido.";
       }
       data.emailVerified = false;
       data.tokenVersion = { increment: 1 };
@@ -101,7 +101,7 @@ export class UserService {
         statusCode: 200,
       };
     } catch (error: any) {
-      throw new Error('Erro ao atualizar o usuário.' + error.message);
+      throw new Error("Erro ao atualizar o usuário." + error.message);
     }
   }
 

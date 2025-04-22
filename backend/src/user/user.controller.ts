@@ -8,20 +8,20 @@ import {
   Post,
   UseGuards,
   HttpCode,
-} from '@nestjs/common';
-import { User as UserModel } from '@prisma/client';
-import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+} from "@nestjs/common";
+import { User as UserModel } from "@prisma/client";
+import { UserService } from "./user.service";
+import { AuthGuard } from "src/auth/auth.guard";
 // import { RolesGuard } from 'src/auth/roles.guard';
 // import { Roles } from 'src/auth/roles.decorator';
-import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateUserDto } from './dto/updateUser.dto';
+import { CreateUserDto } from "./dto/createUser.dto";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
-@Controller('user')
+@Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Post('signup')
+  @Post("signup")
   @HttpCode(201)
   async signupUser(
     @Body() createUserDto: CreateUserDto,
@@ -30,24 +30,24 @@ export class UserController {
     // Envia a resposta manualmente
     return {
       email: user.email,
-      success: 'Usuário criado com sucesso.',
+      success: "Usuário criado com sucesso.",
       statusCode: 201,
     };
   }
 
   @UseGuards(AuthGuard)
-  @Get('profile')
+  @Get("profile")
   async getUser(
     @Request() req: any,
   ): Promise<Omit<
     UserModel,
-    'password' | 'otp' | 'expiresOtpAt' | 'role'
+    "password" | "otp" | "expiresOtpAt" | "role"
   > | null> {
     const userId = req.user.id; // ID do usuário extraído do token
     return this.userService.user({ id: userId });
   }
 
-  @Patch('update')
+  @Patch("update")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateUser(
@@ -66,22 +66,22 @@ export class UserController {
     });
 
     return {
-      message: 'Usuário atualizado com sucesso.',
+      message: "Usuário atualizado com sucesso.",
       statusCode: 200,
     };
   }
 
   @UseGuards(AuthGuard)
-  @Delete('delete')
+  @Delete("delete")
   @HttpCode(200)
   async deleteUser(
     @Request() req: any,
   ): Promise<{ success: string; statusCode: number }> {
-    const cookie = req.cookies['access_token'];
+    const cookie = req.cookies["access_token"];
     await this.userService.deleteUser(cookie);
 
     return {
-      success: 'Usuário deletado com sucesso.',
+      success: "Usuário deletado com sucesso.",
       statusCode: 200,
     };
   }
