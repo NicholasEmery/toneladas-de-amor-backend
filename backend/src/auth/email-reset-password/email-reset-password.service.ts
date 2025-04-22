@@ -5,11 +5,10 @@ import * as bycript from 'bcrypt';
 
 @Injectable()
 export class EmailResetPasswordService {
-  @Inject()
-  private readonly prisma: PrismaService;
-
-  @Inject()
-  private readonly jwtService: JwtService;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async sendEmail(email: string): Promise<{ resetPasswordToken: string }> {
     const user = await this.prisma.user.findUnique({

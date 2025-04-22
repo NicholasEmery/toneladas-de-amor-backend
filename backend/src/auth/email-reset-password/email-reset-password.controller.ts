@@ -13,7 +13,7 @@ export class EmailResetPasswordController {
   @HttpCode(200)
   async sendEmail(
     @Body() sendEmailDto: SendEmailDto,
-    @Res() res,
+    @Res() res: any,
   ): Promise<{ success: string; statusCode: number }> {
     const resetPasswordToken = await this.emailResetPasswordService.sendEmail(
       sendEmailDto.email,

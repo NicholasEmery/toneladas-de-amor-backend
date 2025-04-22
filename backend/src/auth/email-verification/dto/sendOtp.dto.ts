@@ -9,5 +9,5 @@ export class SendOtpDto {
   @IsString()
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 }

@@ -6,9 +6,20 @@ export class MailServiceVerifiedEmail {
   private transporter: nodemailer.Transporter;
 
   constructor() {
+    const host = process.env.EMAIL_HOST;
+    const port = process.env.EMAIL_PORT;
+    const user = process.env.EMAIL_USER;
+    const pass = process.env.EMAIL_PASSWORD;
+
+    if (!host || !port || !user || !pass) {
+      throw new Error(
+        'Configurações de e-mail não estão definidas no ambiente.',
+      );
+    }
+
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST, // Servidor SMTP
-      port: parseInt(process.env.EMAIL_PORT, 10), // Porta do servidor SMTP
+      port: parseInt(port, 10), // Porta do servidor SMTP
       secure: false, // Use true para 465, false para outras portas
       auth: {
         user: process.env.EMAIL_USER, // E-mail do remetente

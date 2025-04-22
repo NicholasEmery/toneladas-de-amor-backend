@@ -8,7 +8,7 @@ export class VerifyOptDto {
   })
   @IsString()
   @IsNotEmpty()
-  otp: string;
+  otp!: string;
 
   @ApiProperty({
     default: 'example@gmail.com',
@@ -16,5 +16,5 @@ export class VerifyOptDto {
   })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 }

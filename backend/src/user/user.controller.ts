@@ -38,8 +38,8 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('profile')
   async getUser(
-    @Request() req,
-  ): Promise<Omit<UserModel, 'password' | 'otp' | 'expiresOtpAt' | 'role'>> {
+    @Request() req: any,
+  ): Promise<Omit<UserModel, 'password' | 'otp' | 'expiresOtpAt' | 'role'> | null> {
     const userId = req.user.id; // ID do usuário extraído do token
     return this.userService.user({ id: userId });
   }
@@ -49,7 +49,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   async updateUser(
     @Body() userDataUpdate: UpdateUserDto,
-    @Request() req,
+    @Request() req: any,
   ): Promise<{
     message: string;
     statusCode: number;
@@ -72,7 +72,7 @@ export class UserController {
   @Delete('delete')
   @HttpCode(200)
   async deleteUser(
-    @Request() req,
+    @Request() req: any,
   ): Promise<{ success: string; statusCode: number }> {
     const cookie = req.cookies['access_token'];
     await this.userService.deleteUser(cookie);

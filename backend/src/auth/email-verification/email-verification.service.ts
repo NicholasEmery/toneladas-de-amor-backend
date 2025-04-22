@@ -4,11 +4,10 @@ import { MailServiceVerifiedEmail } from 'src/mail/mail-otp/mail-verified-email.
 
 @Injectable()
 export class EmailVerificationService {
-  @Inject()
-  private readonly prisma: PrismaService;
-
-  @Inject()
-  private readonly MailServiceVerifiedEmail: MailServiceVerifiedEmail;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly MailServiceVerifiedEmail: MailServiceVerifiedEmail,
+  ) {}
 
   async sendOtp(email: string) {
     const user = await this.prisma.user.findUnique({
@@ -48,8 +47,16 @@ export class EmailVerificationService {
       },
     });
 
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
     if (otp !== user.otp) {
       throw new BadRequestException('Invalid OTP');
+    }
+
+    if (user.expiresOtpAt === null) { 
+      throw new BadRequestException('OTP não possui data de expiração');
     }
 
     if (new Date() > user.expiresOtpAt) {

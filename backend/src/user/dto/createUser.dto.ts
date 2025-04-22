@@ -16,7 +16,7 @@ export class CreateUserDto {
   })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiProperty({
     default: 'Example User',
@@ -25,7 +25,7 @@ export class CreateUserDto {
   @Length(3)
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({
     default: 'examplePassword',
@@ -38,7 +38,7 @@ export class CreateUserDto {
   })
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password!: string;
 
   @ApiProperty({
     default: 'ADMIN',
@@ -50,5 +50,5 @@ export class CreateUserDto {
   @Matches(/^[A-Z]*$/, {
     message: 'Role must only contain uppercase letters',
   })
-  role: Role;
+  role!: Role;
 }

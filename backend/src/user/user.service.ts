@@ -6,15 +6,14 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  @Inject()
-  private readonly prisma: PrismaService;
-
-  @Inject()
-  private readonly jwtService: JwtService;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<Omit<User, 'password' | 'otp' | 'expiresOtpAt' | 'role'>> {
+  ): Promise<Omit<User, 'password' | 'otp' | 'expiresOtpAt' | 'role'> | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
       select: {
@@ -101,7 +100,7 @@ export class UserService {
         message: successMessage,
         statusCode: 200,
       };
-    } catch (error) {
+    } catch (error: any) {
       throw new Error('Erro ao atualizar o usuário.' + error.message);
     }
   }

@@ -10,11 +10,7 @@ import { PrismaService } from 'src/database/prisma.service';
 
 @Injectable()
 export class AuthService {
-  @Inject()
-  private readonly prisma: PrismaService;
-
-  @Inject()
-  private readonly jwtService: JwtService;
+  constructor(private readonly prisma: PrismaService,  private readonly jwtService: JwtService) {};
 
   async signin(params: {
     email: string;

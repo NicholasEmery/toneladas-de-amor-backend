@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class VerifyTokenDto {
   @IsString()
   @IsNotEmpty()
-  token: string;
+  token!: string;
 
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password!: string;
 }

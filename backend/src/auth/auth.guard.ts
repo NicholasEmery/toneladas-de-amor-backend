@@ -10,11 +10,10 @@ import { PrismaService } from 'src/database/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  @Inject()
-  private readonly jwtService: JwtService;
-
-  @Inject()
-  private readonly prisma: PrismaService;
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -45,7 +44,7 @@ export class AuthGuard implements CanActivate {
       request.user = user;
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       if (error.name === 'TokenExpiredError') {
         throw new UnauthorizedException('Token has expired');
       }

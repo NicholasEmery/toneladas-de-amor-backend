@@ -7,7 +7,6 @@ import { EmailVerificationModule } from './auth/email-verification/email-verific
 import { MailModuleVerifiedEmail } from './mail/mail-otp/mail-verified-email.module';
 import { MailResetPasswordService } from './mail/mail-reset-password/mail-reset-password.service';
 import { MailResetPasswordModule } from './mail/mail-reset-password/mail-reset-password.module';
-import { OrganizationModule } from './organization/organization.module';
 
 @Module({
   imports: [
@@ -17,7 +16,6 @@ import { OrganizationModule } from './organization/organization.module';
     EmailVerificationModule,
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
-    OrganizationModule,
   ],
   providers: [
     {

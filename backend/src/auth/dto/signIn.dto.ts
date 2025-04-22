@@ -8,7 +8,7 @@ export class SignInDto {
   })
   @IsString()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiProperty({
     default: 'examplePassword',
@@ -16,5 +16,5 @@ export class SignInDto {
   })
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password!: string;
 }

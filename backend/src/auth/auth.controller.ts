@@ -2,10 +2,9 @@ import {
   Body,
   Controller,
   HttpCode,
-  Inject,
   Post,
   Res,
-  Req,
+  Request,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -15,8 +14,8 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  @Inject()
-  private readonly authService: AuthService;
+  
+  constructor(private readonly authService: AuthService) {};
 
   @Post('signin')
   @HttpCode(200)
@@ -69,7 +68,7 @@ export class AuthController {
   
   @Post('logout')
   @HttpCode(200)
-  async logout(@Req() req, @Res() res: Response) {
+  async logout(@Request() req: any, @Res() res: Response) {
     const cookie = req.cookies['access_token']; // Obtém o token JWT do cookie
 
     await this.authService.logout(cookie); // Chama o serviço de logout
