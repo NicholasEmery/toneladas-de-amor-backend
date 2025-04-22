@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle("Docs API")
-    .setDescription("Documentation for the API")
+    .setDescription("Toneladas de Amor Backend - API documentation for managing and supporting the application's backend services.")
     .setVersion(version)
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
