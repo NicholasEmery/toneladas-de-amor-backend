@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  Res,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Res, Request } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
@@ -14,8 +7,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  
-  constructor(private readonly authService: AuthService) {};
+  constructor(private readonly authService: AuthService) {}
 
   @Post('signin')
   @HttpCode(200)
@@ -65,7 +57,7 @@ export class AuthController {
       statusCode: 200,
     });
   }
-  
+
   @Post('logout')
   @HttpCode(200)
   async logout(@Request() req: any, @Res() res: Response) {

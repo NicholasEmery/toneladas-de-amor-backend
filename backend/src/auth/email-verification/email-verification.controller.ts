@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpCode,
-  Request,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Request } from '@nestjs/common';
 import { EmailVerificationService } from './email-verification.service';
 import { SendOtpDto } from './dto/sendOtp.dto';
 import { VerifyOptDto } from './dto/verifyOtp.dto';

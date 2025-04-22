@@ -55,7 +55,7 @@ export class EmailVerificationService {
       throw new BadRequestException('Invalid OTP');
     }
 
-    if (user.expiresOtpAt === null) { 
+    if (user.expiresOtpAt === null) {
       throw new BadRequestException('OTP não possui data de expiração');
     }
 

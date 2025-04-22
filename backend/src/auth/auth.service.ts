@@ -10,7 +10,10 @@ import { PrismaService } from 'src/database/prisma.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService,  private readonly jwtService: JwtService) {};
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signin(params: {
     email: string;
@@ -48,7 +51,7 @@ export class AuthService {
         where: { id: userId },
         data: { tokenVersion: { increment: 1 } },
       });
-    } catch (error) { 
+    } catch (error) {
       throw new UnauthorizedException('Invalid token or expired');
     }
   }
