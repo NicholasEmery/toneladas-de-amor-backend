@@ -1,10 +1,50 @@
 {
   "name": "api-toneladas-de-amor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Novas funcionalidades"
+      },
+      {
+        "type": "fix",
+        "section": "Correções"
+      },
+      {
+        "type": "docs",
+        "section": "Documentação"
+      },
+      {
+        "type": "style",
+        "section": "Estilo"
+      },
+      {
+        "type": "refactor",
+        "section": "Refatoração"
+      },
+      {
+        "type": "perf",
+        "section": "Performance"
+      },
+      {
+        "type": "test",
+        "section": "Testes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      }
+    ],
+    "skip": {
+      "tag": false
+    },
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
