@@ -1,1 +1,21 @@
-* text=auto
+# Força finais de linha LF para todos os arquivos de texto
+* text=auto eol=lf
+
+# Trata arquivos binários corretamente
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# Arquivos do Windows podem usar CRLF se necessário
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Arquivos shell script sempre com LF
+*.sh text eol=lf
+
+# Arquivos Markdown e JSON sempre com LF
+*.md text eol=lf
+*.json text eol=lf
