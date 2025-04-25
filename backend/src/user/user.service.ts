@@ -1,8 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, Role, User } from "@prisma/client";
 import { PrismaService } from "src/database/prisma.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { UserArgs } from "@prisma/client/runtime/library";
 
 @Injectable()
 export class UserService {
@@ -11,26 +12,36 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async user(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<Omit<User, "password" | "otp" | "expiresOtpAt" | "role"> | null> {
-    return this.prisma.user.findUnique({
+  async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<{
+    name: string;
+    email: string;
+    telefone: string;
+    endereco: string;
+    role: Role;
+  }> {
+    const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
       select: {
-        id: true,
-        email: true,
         name: true,
-        emailVerified: true,
-        tokenVersion: true,
-        createdAt: true,
-        updatedAt: true,
+        email: true,
+        telefone: true,
+        endereco: true,
+        role: true,
       },
     });
+
+    if (!user) {
+      throw new NotFoundException("Usuário não encontrado.");
+    }
+
+    return user;
   }
 
   async createUser(data: {
-    email: string;
     name: string;
+    email: string;
+    telefone: string;
+    endereco: string;
     password: string;
     role: Role;
   }): Promise<User> {

@@ -21,8 +21,10 @@ enum Role {
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
   email         String    @unique
-  name          String?
+  telefone      String    @unique
+  endereco      String
   password      String
   emailVerified Boolean   @default(false)
   otp           String?
@@ -31,4 +33,34 @@ model User {
   updatedAt     DateTime  @updatedAt
   tokenVersion  Int       @default(0)
   role          Role
+}
+
+model Product {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  stockQuant Int
+  category   String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  items      BasketItem[]
+}
+
+model Basket {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  dataCriacao DateTime     @default(now())
+  descricao   String?
+  tipo        String?
+  status      String?
+  quantCesta  Int?
+  isCompleted Boolean      @default(false)
+  items       BasketItem[]
+}
+
+model BasketItem {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId  String  @db.ObjectId
+  product    Product @relation(fields: [productId], references: [id])
+  quantItens Int
+  basketId   String  @db.ObjectId
+  basket     Basket  @relation(fields: [basketId], references: [id])
 }

@@ -4,6 +4,8 @@ export class User implements PrismaUser {
   id!: string;
   email!: string;
   name!: string;
+  telefone!: string;
+  endereco!: string
   password!: string;
   emailVerified!: boolean;
   otp!: string | null;

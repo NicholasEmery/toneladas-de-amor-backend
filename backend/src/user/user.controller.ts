@@ -8,8 +8,9 @@ import {
   Post,
   UseGuards,
   HttpCode,
+  NotFoundException,
 } from "@nestjs/common";
-import { User as UserModel } from "@prisma/client";
+import { User, User as UserModel } from "@prisma/client";
 import { UserService } from "./user.service";
 import { AuthGuard } from "src/auth/auth.guard";
 // import { RolesGuard } from 'src/auth/roles.guard';
@@ -35,16 +36,12 @@ export class UserController {
     };
   }
 
-  @UseGuards(AuthGuard)
   @Get("profile")
-  async getUser(
-    @Request() req: any,
-  ): Promise<Omit<
-    UserModel,
-    "password" | "otp" | "expiresOtpAt" | "role"
-  > | null> {
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  async getUser(@Request() req: any): Promise<{email: string, name: string, telefone: string, endereco: string, role: string}> {
     const userId = req.user.id; // ID do usuário extraído do token
-    return this.userService.user({ id: userId });
+    return await this.userService.user({ id: userId });
   }
 
   @Patch("update")
