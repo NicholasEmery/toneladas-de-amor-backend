@@ -22,7 +22,7 @@ export class EmailResetPasswordController {
     res.cookie("resetPasswordToken", resetPasswordToken, {
       httpOnly: true,
       // secure: true,
-      // sameSite: "strict",
+      sameSite: "none",
       maxAge: 15 * 60 * 1000, // 15 minutos
     });
 

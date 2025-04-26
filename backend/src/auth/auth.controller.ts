@@ -48,7 +48,7 @@ export class AuthController {
     res.cookie("access_token", access_token, {
       httpOnly: true, // Impede acesso ao cookie via JavaScript
       // secure: true, // Garante que o cookie só será enviado em conexões HTTPS
-      // sameSite: "strict", // Protege contra ataques CSRF
+      sameSite: "none", // Protege contra ataques CSRF
       maxAge: 30 * 24 * 60 * 60 * 1000, // Expira em 30 dias
     });
 
@@ -68,7 +68,7 @@ export class AuthController {
     // Remove o cookie de autenticação
     res.clearCookie("access_token", {
       httpOnly: true,
-      // sameSite: "strict",
+      sameSite: "none",
     });
 
     res.send({
