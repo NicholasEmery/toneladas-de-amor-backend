@@ -20,7 +20,7 @@ import { Role } from "@prisma/client";
   name!: string;
 
   @ApiProperty({
-    default: "123456789",
+    default: "83991238499",
     description: "Telefone do usuário",
   })
   @Length(10, 15)
