@@ -33,6 +33,8 @@ export class UserController {
     return {
       email: user.email,
       success: "Usuário criado com sucesso.",
+      // accessToken: user.accessToken,
+      // refreshToken: user.refreshToken,
       statusCode: 201,
     };
   }
@@ -82,8 +84,8 @@ export class UserController {
   async deleteUser(
     @Request() req: any,
   ): Promise<{ success: string; statusCode: number }> {
-    const cookie = req.cookies["access_token"];
-    await this.userService.deleteUser(cookie);
+    const userId = req.user.id; // ID do usuário extraído do token
+    await this.userService.deleteUser(userId);
 
     return {
       success: "Usuário deletado com sucesso.",

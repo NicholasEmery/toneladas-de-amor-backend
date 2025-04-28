@@ -116,13 +116,13 @@ export class UserService {
     }
   }
 
-  async deleteUser(cookie: string) {
-    const payload = this.jwtService.verify(cookie, {
-      secret: process.env.SECRET_KEY,
-    });
-    const userId = payload.sub;
-    await this.prisma.user.delete({
-      where: { id: userId },
-    });
+  async deleteUser(userId: string) {
+    try {
+      await this.prisma.user.delete({
+        where: { id: userId },
+      }); 
+    } catch (error: any) {
+      throw new Error("Erro ao deletar o usuário." + error.message);
+    }
   }
 }

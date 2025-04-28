@@ -19,6 +19,22 @@ export class UpdateUserDto {
   name?: string;
 
   @ApiProperty({
+    default: "123456789",
+    description: "Telefone do usuário",
+  })
+  @IsOptional()
+  @IsString()
+  telefone?: string;
+
+  @ApiProperty({
+    default: "Rua Exemplo, 123",
+    description: "Endereço do usuário",
+  })
+  @IsOptional()
+  @IsString()
+  endereco?: string;
+
+  @ApiProperty({
     default: "examplePassword",
     description: "Senha do usuário",
   })
