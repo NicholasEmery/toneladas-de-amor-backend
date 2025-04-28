@@ -11,6 +11,8 @@ export class MailServiceVerifiedEmail {
     const user = process.env.EMAIL_USER;
     const pass = process.env.EMAIL_PASSWORD;
 
+    console.log("Host:", host, "Port:", port, "User:", user, "Pass:", pass);
+
     if (!host || !port || !user || !pass) {
       throw new Error(
         "Configurações de e-mail não estão definidas no ambiente.",

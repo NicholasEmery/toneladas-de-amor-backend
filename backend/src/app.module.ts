@@ -1,6 +1,7 @@
 import { Module, ValidationPipe } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
+import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from "./database/database.module";
 import { APP_PIPE } from "@nestjs/core";
 import { EmailVerificationModule } from "./auth/email-verification/email-verification.module";
@@ -19,6 +20,7 @@ import { ProductModule } from './product/product.module';
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
     ProductModule,
+    ConfigModule.forRoot(),
   ],
   providers: [
     {
