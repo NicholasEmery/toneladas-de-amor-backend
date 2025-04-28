@@ -20,7 +20,7 @@ import { ProductModule } from './product/product.module';
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
     ProductModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({isGlobal: true}),
   ],
   providers: [
     {

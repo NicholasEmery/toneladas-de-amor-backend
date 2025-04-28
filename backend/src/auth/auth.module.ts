@@ -6,9 +6,11 @@ import { JwtModule } from "@nestjs/jwt";
 import { AuthGuard } from "./auth.guard";
 import { DatabaseModule } from "src/database/database.module";
 import { EmailResetPasswordModule } from "./email-reset-password/email-reset-password.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     DatabaseModule,
     forwardRef(() => UserModule),
     JwtModule.register({
