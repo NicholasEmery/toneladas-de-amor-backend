@@ -26,17 +26,6 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   const customOptions: SwaggerCustomOptions = {
     customSiteTitle: "Toneladas de Amor API Docs",
-    swaggerOptions: {
-      persistAuthorization: true,
-      filter: true,
-      showExtensions: true,
-      showCommonExtensions: true,
-      initOAuth: {},
-    },
-    customJs: [
-      "https://cdn.jsdelivr.net/npm/swagger-ui-standalone-preset@3.52.5/swagger-ui-standalone-preset.js",
-      "https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5/swagger-ui-bundle.js",
-    ],
   };
   SwaggerModule.setup("api", app, documentFactory, customOptions);
 
