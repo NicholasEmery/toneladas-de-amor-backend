@@ -1,11 +1,10 @@
-import { Body, Controller, HttpCode, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, Post, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
 import { RefreshTokenDto } from "./dto/refreshToken.dto";
 import {
   ApiBody,
   ApiOperation,
-  ApiProperty,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -61,7 +60,6 @@ export class AuthController {
   @Post("refresh-token")
   @HttpCode(200)
   @ApiOperation({ summary: "Atualiza o token de autenticação" })
-  @ApiBody({ type: RefreshTokenDto })
   @ApiResponse({
     status: 200,
     example: { message: "Token atualizado com sucesso.", statusCode: 200 },
@@ -74,8 +72,8 @@ export class AuthController {
       statusCode: 401,
     },
   })
-  async refreshToken(@Body() body: { refresh_token: string }) {
-    const { refresh_token } = body;
+  async refreshToken(@Headers('authorization') authHeader: string) {
+    const refresh_token = authHeader?.split(' ')[1]; // Extrai o token do header Authorization
     
     const { accessToken, refreshToken } =
       await this.authService.refreshToken(refresh_token);
@@ -90,7 +88,9 @@ export class AuthController {
 
   @Post("logout")
   @HttpCode(200)
-  async logout(@Body() refreshToken: string) {
+  async logout(@Headers('authorization') authHeader: string) {
+    const refreshToken = authHeader?.split(' ')[1]; // Extrai o token do header Authorization
+
     await this.authService.logout(refreshToken); // Chama o serviço de logout
 
     return {

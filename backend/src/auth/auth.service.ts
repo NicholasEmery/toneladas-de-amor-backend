@@ -88,9 +88,9 @@ export class AuthService {
     }
   }
 
-  async logout(refreshToken: string) {
+  async logout(accessToken: string) {
     try {
-      const payload = this.jwtService.verify(refreshToken, {
+      const payload = this.jwtService.verify(accessToken, {
         secret: process.env.SECRET_KEY,
       }); // Verifica e decodifica o token JWT
 
