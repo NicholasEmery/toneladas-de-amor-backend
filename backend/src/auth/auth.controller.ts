@@ -1,8 +1,14 @@
-import { Body, Controller, HttpCode, Post, Res, Request } from "@nestjs/common";
-import { Response } from "express";
+import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { RefreshTokenDto } from "./dto/refreshToken.dto";
+import {
+  ApiBody,
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -41,39 +47,55 @@ export class AuthController {
       statusCode: 404,
     },
   })
-  async signin(@Body() data: SignInDto, @Res() res: Response) {
-    const { access_token } = await this.authService.signin(data);
+  async signin(@Body() data: SignInDto) {
+    const { access_token, refresh_token } = await this.authService.signin(data);
 
-    // Configura o cookie com o access_token
-    res.cookie("access_token", access_token, {
-      httpOnly: true, // Impede acesso ao cookie via JavaScript
-      // secure: true, // Garante que o cookie só será enviado em conexões HTTPS
-      sameSite: "none", // Protege contra ataques CSRF
-      maxAge: 30 * 24 * 60 * 60 * 1000, // Expira em 30 dias
-    });
-
-    res.send({
+    return {
       message: "Usuário autenticado com sucesso.",
+      access_token,
+      refresh_token,
       statusCode: 200,
-    });
+    };
+  }
+
+  @Post("refresh-token")
+  @HttpCode(200)
+  @ApiOperation({ summary: "Atualiza o token de autenticação" })
+  @ApiBody({ type: RefreshTokenDto })
+  @ApiResponse({
+    status: 200,
+    example: { message: "Token atualizado com sucesso.", statusCode: 200 },
+  })
+  @ApiResponse({
+    status: 401,
+    example: {
+      message: "Token inválido ou expirado",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  async refreshToken(@Body() body: { refresh_token: string }) {
+    const { refresh_token } = body;
+    
+    const { accessToken, refreshToken } =
+      await this.authService.refreshToken(refresh_token);
+
+    return {
+      message: "Token atualizado com sucesso.",
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      statusCode: 200,
+    };
   }
 
   @Post("logout")
   @HttpCode(200)
-  async logout(@Request() req: any, @Res() res: Response) {
-    const cookie = req.cookies["access_token"]; // Obtém o token JWT do cookie
+  async logout(@Body() refreshToken: string) {
+    await this.authService.logout(refreshToken); // Chama o serviço de logout
 
-    await this.authService.logout(cookie); // Chama o serviço de logout
-
-    // Remove o cookie de autenticação
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      sameSite: "none",
-    });
-
-    res.send({
-      message: "Logged out successfully",
+    return {
+      message: "Usuário deslogado com sucesso.",
       statusCode: 200,
-    });
+    };
   }
 }

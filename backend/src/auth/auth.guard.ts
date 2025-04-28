@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -17,14 +16,16 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const cookie = request.cookies["access_token"];
+    const authHeader = request.headers["authorization"];
 
-    if (!cookie) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw new UnauthorizedException("Access token is missing");
     }
 
+    const token = authHeader.split(" ")[1];
+
     try {
-      const payload = this.jwtService.verify(cookie, {
+      const payload = this.jwtService.verify(token, {
         secret: process.env.SECRET_KEY,
       });
 

@@ -17,6 +17,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 // import { Roles } from 'src/auth/roles.decorator';
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
+import { ApiBearerAuth, ApiHeader } from "@nestjs/swagger";
 
 @Controller("user")
 export class UserController {
@@ -39,7 +40,14 @@ export class UserController {
   @Get("profile")
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getUser(@Request() req: any): Promise<{email: string, name: string, telefone: string, endereco: string, role: string}> {
+  @ApiBearerAuth()
+  async getUser(@Request() req: any): Promise<{
+    email: string;
+    name: string;
+    telefone: string;
+    endereco: string;
+    role: string;
+  }> {
     const userId = req.user.id; // ID do usuário extraído do token
     return await this.userService.user({ id: userId });
   }
