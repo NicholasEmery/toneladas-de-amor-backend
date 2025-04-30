@@ -1,13 +1,7 @@
 import { Body, Controller, HttpCode, Post, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
-import { RefreshTokenDto } from "./dto/refreshToken.dto";
-import {
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -72,9 +66,9 @@ export class AuthController {
       statusCode: 401,
     },
   })
-  async refreshToken(@Headers('authorization') authHeader: string) {
-    const refresh_token = authHeader?.split(' ')[1]; // Extrai o token do header Authorization
-    
+  async refreshToken(@Headers("authorization") authHeader: string) {
+    const refresh_token = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
+
     const { accessToken, refreshToken } =
       await this.authService.refreshToken(refresh_token);
 
@@ -88,8 +82,21 @@ export class AuthController {
 
   @Post("logout")
   @HttpCode(200)
-  async logout(@Headers('authorization') authHeader: string) {
-    const refreshToken = authHeader?.split(' ')[1]; // Extrai o token do header Authorization
+  @ApiOperation({ summary: "Logout de usuário" })
+  @ApiResponse({
+    status: 200,
+    example: { message: "Usuário deslogado com sucesso.", statusCode: 200 },
+  })
+  @ApiResponse({
+    status: 401,
+    example: {
+      message: "Token inválido ou expirado",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  async logout(@Headers("authorization") authHeader: string) {
+    const refreshToken = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
     await this.authService.logout(refreshToken); // Chama o serviço de logout
 

@@ -57,6 +57,7 @@ export class UserController {
   @Patch("update")
   @HttpCode(200)
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async updateUser(
     @Body() userDataUpdate: UpdateUserDto,
     @Request() req: any,
@@ -78,9 +79,10 @@ export class UserController {
     };
   }
 
-  @UseGuards(AuthGuard)
   @Delete("delete")
   @HttpCode(200)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async deleteUser(
     @Request() req: any,
   ): Promise<{ success: string; statusCode: number }> {
