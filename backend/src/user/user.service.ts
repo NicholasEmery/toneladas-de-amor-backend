@@ -1,15 +1,13 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException
+} from "@nestjs/common";
 import { Prisma, Role, User } from "@prisma/client";
 import { PrismaService } from "src/database/prisma.service";
 import * as bcrypt from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
-import { UserArgs } from "@prisma/client/runtime/library";
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
   ) {}
 
   async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<{
@@ -51,7 +49,7 @@ export class UserService {
     });
 
     if (user) {
-      throw new Error("Usuário já existe com esse email.");
+      throw new BadRequestException("Usuário já existe com esse email.");
     }
 
     const hashPassword = await bcrypt.hash(data.password, 10);
