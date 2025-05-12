@@ -12,7 +12,6 @@ import { ProductModule } from "./product/product.module";
 import { CreateUserModule } from "./user/create-user/create-user.module";
 import { JwtModule } from "@nestjs/jwt";
 
-
 @Module({
   imports: [
     AuthModule,
