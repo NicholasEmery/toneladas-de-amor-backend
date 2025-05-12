@@ -31,8 +31,8 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || 3001, "localhost");
 
-  let url = await app.getUrl();
-  url = url.replace("[::1]", "localhost");
-  Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
+  // let url = await app.getUrl();
+  // url = url.replace("[::1]", "localhost");
+  // Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
 }
 bootstrap();

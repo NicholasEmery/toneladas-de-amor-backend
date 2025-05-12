@@ -9,7 +9,7 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "@prisma/client";
 
- export class CreateUserDto {
+export class CreateUserAdminDto {
   @ApiProperty({
     default: "Example User",
     description: "Nome do usuário",
@@ -20,31 +20,12 @@ import { Role } from "@prisma/client";
   name!: string;
 
   @ApiProperty({
-    default: "83991238499",
-    description: "Telefone do usuário",
-  })
-  @Length(10, 15)
-  @IsString()
-  @IsNotEmpty()
-  telefone!: string;
-
-  @ApiProperty({
-    default: "Rua Exemplo, 123",
-    description: "Endereço do usuário",
-  })
-  @Length(10, 100)
-  @IsString()
-  @IsNotEmpty()
-  endereco!: string;
-
-  @ApiProperty({
     default: "example@gmail.com",
     description: "Email do usuário",
   })
   @IsEmail()
   @IsNotEmpty()
   email!: string;
-
 
   @ApiProperty({
     default: "examplePassword",
@@ -60,6 +41,15 @@ import { Role } from "@prisma/client";
   password!: string;
 
   @ApiProperty({
+    default: "83991238499",
+    description: "Telefone do usuário",
+  })
+  @Length(10, 15)
+  @IsString()
+  @IsNotEmpty()
+  phone!: string;
+
+  @ApiProperty({
     default: "ADMIN",
     description: "Cargo do usuário",
   })
@@ -68,6 +58,9 @@ import { Role } from "@prisma/client";
   @IsAlpha()
   @Matches(/^[A-Z]*$/, {
     message: "Role must only contain uppercase letters",
+  })
+  @Matches(/^ADMIN$/, {
+    message: "Role must be 'ADMIN'",
   })
   role!: Role;
 }

@@ -4,63 +4,81 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 enum Role {
   ADMIN
   CONTRIBUTOR
   UPHELD
+  DONATOR
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MethodPayment {
+  PIX
+  BOLETO
+  CREDIT_CARD
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  email         String    @unique
-  telefone      String    @unique
-  endereco      String
+  email         String         @unique
   password      String
-  emailVerified Boolean   @default(false)
+  phone         String         @unique
+  role          Role
+  fieldsRole    Json?
+  Donation      Donation[]
+  Notification  Notification[]
+  emailVerified Boolean        @default(false)
   otp           String?
   expiresOtpAt  DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  tokenVersion  Int       @default(0)
-  role          Role
+  tokenVersion  Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Donation {
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String        @db.ObjectId
+  user             User          @relation(fields: [userId], references: [id])
+  amount           Float
+  status           Status        @default(PENDING)
+  methodPayment    MethodPayment
+  recurringPayment Boolean       @default(false)
+  createdAt        DateTime      @default(now())
 }
 
 model Product {
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  stockQuant Int
-  category   String?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  items      BasketItem[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  image       String?
+  name        String
+  description String?
+  stockQuant  Int
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model Basket {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  dataCriacao DateTime     @default(now())
-  descricao   String?
-  tipo        String?
-  status      String?
-  quantCesta  Int?
-  isCompleted Boolean      @default(false)
-  items       BasketItem[]
-}
-
-model BasketItem {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId  String  @db.ObjectId
-  product    Product @relation(fields: [productId], references: [id])
-  quantItens Int
-  basketId   String  @db.ObjectId
-  basket     Basket  @relation(fields: [basketId], references: [id])
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  description String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
