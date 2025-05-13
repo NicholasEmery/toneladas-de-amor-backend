@@ -10,7 +10,6 @@ import {
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "@prisma/client";
-import { UserFieldsRole } from "src/user/interfaces/user.interface";
 import { CreateFieldsRoleColaboratorDto } from "../fieldsRoleUser/createFieldsRole/createFieldsRoleColaborator.dto";
 import { Type } from "class-transformer";
 
@@ -49,7 +48,7 @@ export class CreateUserColaboratorDto {
     default: "83991238499",
     description: "Telefone do usuário",
   })
-  @Length(10, 15)
+  @Length(10, 10, { message: "Phone must be exactly 10 digits" })
   @IsString()
   @IsNotEmpty()
   phone!: string;
@@ -79,7 +78,7 @@ export class CreateUserColaboratorDto {
         neighborhood: "Bairro Exemplo",
         city: "Cidade Exemplo",
         state: "Estado Exemplo",
-        zipCode: "12345",
+        zipCode: "12345678",
       },
     },
     description: "Campos específicos para o usuário do tipo 'COLABORATOR'",

@@ -44,7 +44,7 @@ export class CreateUserAdminDto {
     default: "83991238499",
     description: "Telefone do usuário",
   })
-  @Length(10, 15)
+  @Length(10, 10, { message: "Phone must be exactly 10 digits" })
   @IsString()
   @IsNotEmpty()
   phone!: string;

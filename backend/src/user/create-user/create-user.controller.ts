@@ -112,6 +112,17 @@ export class CreateUserController {
     };
   }
 
+  @ApiOperation({
+    summary: "Cria um usuário com cargo 'ADMIN'",
+  })
+  @ApiBadRequestResponse({
+    description: "User already exists",
+    example: {
+      message: "User already exists",
+      error: "Bad Request",
+      statusCode: 400,
+    },
+  })
   @Post("admin")
   @HttpCode(201)
   async createUserAdmin(

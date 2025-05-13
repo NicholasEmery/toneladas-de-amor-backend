@@ -11,6 +11,7 @@ import { ProductController } from "./product/product.controller";
 import { ProductModule } from "./product/product.module";
 import { CreateUserModule } from "./user/create-user/create-user.module";
 import { JwtModule } from "@nestjs/jwt";
+import { GetUserModule } from "./user/get-user/get-user.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JwtModule } from "@nestjs/jwt";
       secret: process.env.SECRET_KEY,
     }),
     CreateUserModule,
+    GetUserModule,
     EmailVerificationModule,
     MailModuleVerifiedEmail,
     MailResetPasswordModule,

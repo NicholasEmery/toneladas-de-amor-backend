@@ -1,5 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
-import { User } from "@prisma/client";
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { CreateUserUpheldDto } from "../dto/createUser/createUserUpheld.dto";
 import { PrismaService } from "src/database/prisma.service";
 import * as bcrypt from "bcrypt";
@@ -121,65 +124,72 @@ export class CreateUserService {
   }
 
   async createUserColaborator(
-    createUserColaboratorDto: CreateUserColaboratorDto, accessToken: string,
+    createUserColaboratorDto: CreateUserColaboratorDto,
+    accessToken: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     try {
-      const decoded = await this.jwtService.verifyAsync(accessToken);
-      if (decoded.role !== "ADMIN") {
-        throw new UnauthorizedException("Only ADMIN users can create collaborators");
+      try {
+        const decoded = await this.jwtService.verifyAsync(accessToken);
+        if (decoded.role !== "ADMIN") {
+          throw new UnauthorizedException(
+            "Only ADMIN users can create collaborators",
+          );
+        }
+      } catch (error) {
+        throw new UnauthorizedException("Invalid token");
       }
-    } catch (error) { 
-      throw new UnauthorizedException("Invalid token");
+
+      const { name, email, password, phone, role, fieldsRole } =
+        createUserColaboratorDto;
+
+      const existingEmail = await this.prisma.user.findUnique({
+        where: { email: email },
+      });
+
+      if (existingEmail) {
+        throw new BadRequestException("User already exists");
+      }
+      const existingPhone = await this.prisma.user.findUnique({
+        where: { phone: phone },
+      });
+      if (existingPhone) {
+        throw new BadRequestException("Phone number already exists");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await this.prisma.user.create({
+        data: {
+          name: name,
+          email: email,
+          password: hashedPassword,
+          phone: phone,
+          role: role,
+          fieldsRole: JSON.stringify({ fieldsRole }),
+          tokenVersion: 1,
+        },
+      });
+
+      const payload = {
+        sub: user.id,
+        version: user.tokenVersion,
+        role: user.role,
+      };
+
+      const access_token = await this.jwtService.signAsync(payload, {
+        expiresIn: "15m", // Tempo de expiração do access token
+      });
+      const refresh_token = await this.jwtService.signAsync(payload, {
+        expiresIn: "7d", // Tempo de expiração do refresh token
+      });
+
+      return {
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      };
+    } catch (error) {
+      throw new BadRequestException("Error creating user");
     }
-    
-    const { name, email, password, phone, role, fieldsRole } =
-      createUserColaboratorDto;
-
-    const existingEmail = await this.prisma.user.findUnique({
-      where: { email: email },
-    });
-
-    if (existingEmail) {
-      throw new BadRequestException("User already exists");
-    }
-    const existingPhone = await this.prisma.user.findUnique({
-      where: { phone: phone },
-    });
-    if (existingPhone) {
-      throw new BadRequestException("Phone number already exists");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await this.prisma.user.create({
-      data: {
-        name: name,
-        email: email,
-        password: hashedPassword,
-        phone: phone,
-        role: role,
-        fieldsRole: JSON.stringify({ fieldsRole }),
-        tokenVersion: 1,
-      },
-    });
-
-    const payload = {
-      sub: user.id,
-      version: user.tokenVersion,
-      role: user.role,
-    };
-
-    const access_token = await this.jwtService.signAsync(payload, {
-      expiresIn: "15m", // Tempo de expiração do access token
-    });
-    const refresh_token = await this.jwtService.signAsync(payload, {
-      expiresIn: "7d", // Tempo de expiração do refresh token
-    });
-
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
   }
 
   async createUserAdmin(

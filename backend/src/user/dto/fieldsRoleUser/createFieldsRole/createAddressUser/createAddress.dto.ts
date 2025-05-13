@@ -27,8 +27,8 @@ export class CreateAddressDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^\d{5}$/, {
-    message: "Zip code must be exactly 5 digits",
+  @Matches(/^\d{8}$/, {
+    message: "Zip code must be exactly 8 digits",
   })
   zipCode!: string;
 }

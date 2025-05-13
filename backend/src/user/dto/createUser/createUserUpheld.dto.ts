@@ -48,7 +48,7 @@ export class CreateUserUpheldDto {
     default: "83991238499",
     description: "Telefone do usuário",
   })
-  @Length(10, 15)
+  @Length(10, 10, { message: "Phone must be exactly 10 digits" })
   @IsMobilePhone("pt-BR")
   @Matches(/^[0-9]*$/, {
     message: "Phone must only contain numbers",
@@ -83,7 +83,7 @@ export class CreateUserUpheldDto {
         neighborhood: "Bairro Exemplo",
         city: "Cidade Exemplo",
         state: "Estado Exemplo",
-        zipCode: "12345",
+        zipCode: "12345678",
       },
     },
     description: "Campos específicos para o usuário do tipo 'UPHELD'",
