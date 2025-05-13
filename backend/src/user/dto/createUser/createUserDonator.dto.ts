@@ -47,7 +47,7 @@ export class CreateUserDonatorDto {
     default: "83991238499",
     description: "Telefone do usuário",
   })
-  @Length(10, 10, { message: "Phone must be exactly 10 digits" })
+  @Length(13, 13, { message: "Phone must be exactly 13 digits" })
   @IsString()
   @IsNotEmpty()
   phone!: string;

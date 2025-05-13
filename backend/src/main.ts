@@ -14,7 +14,6 @@ async function bootstrap() {
   app.enableCors({
     origin: isProduction ? process.env.URL_FRONTEND : true,
   });
-  app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle("Docs API")
     .setDescription(
@@ -31,7 +30,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || 3400, "0.0.0.0");
 
-  let url = await app.getUrl();
+  const url = await app.getUrl();
   Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
 }
 bootstrap();

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Role } from "@prisma/client";
 import { PrismaService } from "src/database/prisma.service";
 
@@ -19,7 +19,11 @@ export class GetUserService {
       }
 
       return user;
-    } catch (error) {
+        } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
       throw new Error("Error fetching user by ID");
     }
   }
@@ -38,7 +42,10 @@ export class GetUserService {
 
       return user;
     } catch (error) {
-      throw new Error("Error fetching user by email");
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException("Error fetching user by email");
     }
   }
 
@@ -56,7 +63,10 @@ export class GetUserService {
 
       return user;
     } catch (error) {
-      throw new Error("Error fetching user by phone");
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException("Error fetching user by phone");
     }
   }
 
@@ -74,7 +84,10 @@ export class GetUserService {
 
       return user;
     } catch (error) {
-      throw new Error("Error fetching user by name");
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException("Error fetching user by name");
     }
   }
 
@@ -86,18 +99,25 @@ export class GetUserService {
         },
       });
 
-      if (!user) {
+      if (!user || user.length === 0) {
         throw new NotFoundException("User not found");
       }
 
       return user;
     } catch (error) {
-      throw new Error("Error fetching user by role");
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException("Error fetching user by role");
     }
   }
 
   async getAllUsers() {
-    const users = await this.prisma.user.findMany();
-    return users;
+    try {
+      const users = await this.prisma.user.findMany();
+      return users;
+    } catch (error) {
+      throw new BadRequestException("Error fetching all users");
+    }
   }
 }

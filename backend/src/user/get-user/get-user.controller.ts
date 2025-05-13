@@ -15,7 +15,11 @@ import { GetUserByEmailDto } from "../dto/getUser/getUserByEmail.dto";
 import { GetUserByPhoneDto } from "../dto/getUser/getUserByPhone.dto";
 import { GetUserByNameDto } from "../dto/getUser/getUserByName.dto";
 import { GetUsersByRoleDto } from "../dto/getUser/getUsersByRole.dto";
-import { ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { RolesGuard } from "src/auth/roles.guard";
 import { Roles } from "src/auth/roles.decorator";
 
@@ -23,16 +27,30 @@ import { Roles } from "src/auth/roles.decorator";
 export class GetUserController {
   constructor(private readonly getUserService: GetUserService) {}
 
+  @ApiOperation({
+    summary: "Busca usuário por ID do token",
+    description: "Busca usuário por ID do token",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
   @Get("id-token")
   @HttpCode(200)
   @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(RolesGuard, AuthGuard)
   async getUserByIdToken(@Request() req: any): Promise<{
     success: string;
     user: User;
     statusCode: number;
   }> {
     const userId = req.user.id;
+    console.log("Chamou getAllUsers");
 
     const user = await this.getUserService.getUserById(userId);
 
@@ -55,6 +73,7 @@ export class GetUserController {
       statusCode: 401,
     },
   })
+  @ApiBearerAuth()
   @Get(":userId")
   @HttpCode(200)
   @Roles(Role.ADMIN)
@@ -66,6 +85,8 @@ export class GetUserController {
   }> {
     const { userId } = getUserByIdDto;
 
+    console.log("Chamou getAllUsers");
+
     const user = await this.getUserService.getUserById(userId);
 
     return {
@@ -75,6 +96,19 @@ export class GetUserController {
     };
   }
 
+  @ApiOperation({
+    summary: "Busca usuário por email",
+    description: "Busca usuário por email",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
   @Get("email")
   @HttpCode(200)
   @UseGuards(AuthGuard)
@@ -94,6 +128,19 @@ export class GetUserController {
     };
   }
 
+  @ApiOperation({
+    summary: "Busca usuário por telefone",
+    description: "Busca usuário por telefone",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
   @Get("phone")
   @HttpCode(200)
   @UseGuards(AuthGuard)
@@ -113,6 +160,19 @@ export class GetUserController {
     };
   }
 
+  @ApiOperation({
+    summary: "Busca usuário por nome",
+    description: "Busca usuário por nome",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
   @Get("name")
   @HttpCode(200)
   @UseGuards(AuthGuard)
@@ -123,6 +183,8 @@ export class GetUserController {
   }> {
     const { name } = getUserByNameDto;
 
+    console.log("Chamou getAllUsers");
+
     const user = await this.getUserService.getUserByName(name);
 
     return {
@@ -132,7 +194,20 @@ export class GetUserController {
     };
   }
 
-  @Get("all/role")
+  @ApiOperation({
+    summary: "Busca usuários por role",
+    description: "Busca usuários por role",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
+  @Get("role")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByRole(@Body() getUserByRoleDto: GetUsersByRoleDto): Promise<{
@@ -141,6 +216,8 @@ export class GetUserController {
     statusCode: number;
   }> {
     const { role } = getUserByRoleDto;
+
+    console.log("Chamou getAllUsers");
 
     const users = await this.getUserService.getUserByRole(role);
 
@@ -151,15 +228,29 @@ export class GetUserController {
     };
   }
 
+  @ApiOperation({
+    summary: "Busca todos os usuários",
+    description: "Busca todos os usuários",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  // @ApiBearerAuth()
   @Get("all")
   @HttpCode(200)
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async getAllUsers(): Promise<{
     success: string;
     users: User[];
     statusCode: number;
   }> {
     const users = await this.getUserService.getAllUsers();
+    console.log("Chamou getAllUsers");
     return {
       success: "Usuários encontrados com sucesso.",
       users,

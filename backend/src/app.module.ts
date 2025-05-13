@@ -33,7 +33,7 @@ import { GetUserModule } from "./user/get-user/get-user.module";
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    },
+    }, 
     MailResetPasswordService,
   ],
   controllers: [ProductController],
