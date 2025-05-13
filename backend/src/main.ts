@@ -29,11 +29,9 @@ async function bootstrap() {
   };
   SwaggerModule.setup("api", app, documentFactory, customOptions);
 
-  const port = process.env.PORT || 3400;
-  await app.listen(port);
+  await app.listen(process.env.PORT || 3400, "0.0.0.0");
 
   let url = await app.getUrl();
-  url = url.replace("[::1]", "localhost");
   Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
 }
 bootstrap();
