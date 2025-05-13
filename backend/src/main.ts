@@ -29,7 +29,8 @@ async function bootstrap() {
   };
   SwaggerModule.setup("api", app, documentFactory, customOptions);
 
-  await app.listen(process.env.PORT || 3400, "localhost");
+  const port = process.env.PORT || 3400;
+  await app.listen(port);
 
   let url = await app.getUrl();
   url = url.replace("[::1]", "localhost");
