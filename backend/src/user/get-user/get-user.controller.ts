@@ -50,13 +50,41 @@ export class GetUserController {
     statusCode: number;
   }> {
     const userId = req.user.id;
-    console.log("Chamou getAllUsers");
 
     const user = await this.getUserService.getUserById(userId);
 
     return {
       success: "Usuário encontrado com sucesso.",
       user,
+      statusCode: 200,
+    };
+  }
+
+  @ApiOperation({
+    summary: "Busca todos os usuários",
+    description: "Busca todos os usuários",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
+  @Get("all")
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  async getAllUsers(): Promise<{
+    success: string;
+    users: User[];
+    statusCode: number;
+  }> {
+    const users = await this.getUserService.getAllUsers();
+    return {
+      success: "Usuários encontrados com sucesso.",
+      users,
       statusCode: 200,
     };
   }
@@ -85,7 +113,6 @@ export class GetUserController {
   }> {
     const { userId } = getUserByIdDto;
 
-    console.log("Chamou getAllUsers");
 
     const user = await this.getUserService.getUserById(userId);
 
@@ -183,7 +210,6 @@ export class GetUserController {
   }> {
     const { name } = getUserByNameDto;
 
-    console.log("Chamou getAllUsers");
 
     const user = await this.getUserService.getUserByName(name);
 
@@ -217,42 +243,11 @@ export class GetUserController {
   }> {
     const { role } = getUserByRoleDto;
 
-    console.log("Chamou getAllUsers");
 
     const users = await this.getUserService.getUserByRole(role);
 
     return {
       success: `Usuários com role: ${role} encontrados com sucesso.`,
-      users,
-      statusCode: 200,
-    };
-  }
-
-  @ApiOperation({
-    summary: "Busca todos os usuários",
-    description: "Busca todos os usuários",
-  })
-  @ApiUnauthorizedResponse({
-    description: "Token inválido ou não fornecido",
-    example: {
-      message: "Token inválido ou não fornecido",
-      error: "Unauthorized",
-      statusCode: 401,
-    },
-  })
-  // @ApiBearerAuth()
-  @Get("all")
-  @HttpCode(200)
-  // @UseGuards(AuthGuard)
-  async getAllUsers(): Promise<{
-    success: string;
-    users: User[];
-    statusCode: number;
-  }> {
-    const users = await this.getUserService.getAllUsers();
-    console.log("Chamou getAllUsers");
-    return {
-      success: "Usuários encontrados com sucesso.",
       users,
       statusCode: 200,
     };

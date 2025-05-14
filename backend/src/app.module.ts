@@ -1,8 +1,7 @@
-import { Module, ValidationPipe } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from "./database/database.module";
-import { APP_PIPE } from "@nestjs/core";
 import { EmailVerificationModule } from "./auth/email-verification/email-verification.module";
 import { MailModuleVerifiedEmail } from "./mail/mail-otp/mail-verified-email.module";
 import { MailResetPasswordService } from "./mail/mail-reset-password/mail-reset-password.service";
@@ -30,10 +29,6 @@ import { GetUserModule } from "./user/get-user/get-user.module";
     ProductModule,
   ],
   providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    }, 
     MailResetPasswordService,
   ],
   controllers: [ProductController],
