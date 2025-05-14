@@ -39,7 +39,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get("id-token")
+  @Get("by-token")
   @HttpCode(200)
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard, AuthGuard)
@@ -101,7 +101,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get(":email")
+  @Get("by-email/:email")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByEmail(@Param() getUserByEmailDto: GetUserByEmailDto): Promise<{
@@ -133,7 +133,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get(":phone")
+  @Get("by-phone/:phone")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByPhone(@Param() getUserByPhoneDto: GetUserByPhoneDto): Promise<{
@@ -165,7 +165,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get(":name")
+  @Get("by-name/:name")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByName(@Param() getUserByNameDto: GetUserByNameDto): Promise<{
@@ -198,7 +198,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get(":role")
+  @Get("by-role/:role")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByRole(@Param() getUserByRoleDto: GetUsersByRoleDto): Promise<{
@@ -231,7 +231,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get(":userId")
+  @Get("by-id/:userId")
   @HttpCode(200)
   @Roles(Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
