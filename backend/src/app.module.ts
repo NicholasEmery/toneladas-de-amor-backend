@@ -11,6 +11,8 @@ import { ProductModule } from "./product/product.module";
 import { CreateUserModule } from "./user/create-user/create-user.module";
 import { JwtModule } from "@nestjs/jwt";
 import { GetUserModule } from "./user/get-user/get-user.module";
+import { DeleteUserModule } from "./user/delete-user/delete-user.module";
+import { UpdateUserModule } from "./user/update-user/update-user.module";
 
 @Module({
   imports: [
@@ -23,14 +25,14 @@ import { GetUserModule } from "./user/get-user/get-user.module";
     }),
     CreateUserModule,
     GetUserModule,
+    DeleteUserModule,
+    UpdateUserModule,
     EmailVerificationModule,
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
     ProductModule,
   ],
-  providers: [
-    MailResetPasswordService,
-  ],
+  providers: [MailResetPasswordService],
   controllers: [ProductController],
 })
 export class AppModule {}
