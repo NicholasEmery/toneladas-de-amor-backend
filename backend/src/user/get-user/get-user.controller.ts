@@ -89,40 +89,6 @@ export class GetUserController {
   }
 
   @ApiOperation({
-    summary: "Busca usuário por ID",
-    description: "Busca usuário por ID",
-  })
-  @ApiUnauthorizedResponse({
-    description: "Token inválido ou não fornecido",
-    example: {
-      message: "Token inválido ou não fornecido",
-      error: "Unauthorized",
-      statusCode: 401,
-    },
-  })
-  @ApiBearerAuth()
-  @Get(":userId")
-  @HttpCode(200)
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard, RolesGuard)
-  async getUserById(@Param() getUserByIdDto: GetUserByIdDto): Promise<{
-    success: string;
-    user: User;
-    statusCode: number;
-  }> {
-    const { userId } = getUserByIdDto;
-
-
-    const user = await this.getUserService.getUserById(userId);
-
-    return {
-      success: "Usuário encontrado com sucesso.",
-      user,
-      statusCode: 200,
-    };
-  }
-
-  @ApiOperation({
     summary: "Busca usuário por email",
     description: "Busca usuário por email",
   })
@@ -135,7 +101,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get("email")
+  @Get(":email")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByEmail(@Param() getUserByEmailDto: GetUserByEmailDto): Promise<{
@@ -167,7 +133,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get("phone")
+  @Get(":phone")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByPhone(@Param() getUserByPhoneDto: GetUserByPhoneDto): Promise<{
@@ -199,7 +165,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get("name")
+  @Get(":name")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByName(@Param() getUserByNameDto: GetUserByNameDto): Promise<{
@@ -232,7 +198,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
-  @Get("role")
+  @Get(":role")
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getUserByRole(@Param() getUserByRoleDto: GetUsersByRoleDto): Promise<{
@@ -248,6 +214,40 @@ export class GetUserController {
     return {
       success: `Usuários com role: ${role} encontrados com sucesso.`,
       users,
+      statusCode: 200,
+    };
+  }
+
+  @ApiOperation({
+    summary: "Busca usuário por ID",
+    description: "Busca usuário por ID",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
+  @Get(":userId")
+  @HttpCode(200)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  async getUserById(@Param() getUserByIdDto: GetUserByIdDto): Promise<{
+    success: string;
+    user: User;
+    statusCode: number;
+  }> {
+    const { userId } = getUserByIdDto;
+
+
+    const user = await this.getUserService.getUserById(userId);
+
+    return {
+      success: "Usuário encontrado com sucesso.",
+      user,
       statusCode: 200,
     };
   }

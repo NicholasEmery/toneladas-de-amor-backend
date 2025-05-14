@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, Post, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -66,6 +66,7 @@ export class AuthController {
       statusCode: 401,
     },
   })
+  @ApiBearerAuth()
   async refreshToken(@Headers("authorization") authHeader: string) {
     const refresh_token = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
@@ -95,10 +96,11 @@ export class AuthController {
       statusCode: 401,
     },
   })
+  @ApiBearerAuth()
   async logout(@Headers("authorization") authHeader: string) {
-    const refreshToken = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
+    const accessToken = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
-    await this.authService.logout(refreshToken); // Chama o serviço de logout
+    await this.authService.logout(accessToken); // Chama o serviço de logout
 
     return {
       message: "Usuário deslogado com sucesso.",

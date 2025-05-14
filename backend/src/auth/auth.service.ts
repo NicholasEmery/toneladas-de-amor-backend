@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -29,7 +30,7 @@ export class AuthService {
     if (user.emailVerified === false)
       throw new UnauthorizedException("Email not verified");
 
-    const payload = { sub: user.id, version: user.tokenVersion };
+    const payload = { sub: user.id, version: user.tokenVersion, role: user.role };
 
     const access_token = await this.jwtService.signAsync(payload, {
       expiresIn: "15m", // Tempo de expiração do access token
@@ -45,9 +46,7 @@ export class AuthService {
     refresh_token: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     try {
-      const payload = this.jwtService.verify(refresh_token, {
-        secret: process.env.SECRET_KEY,
-      });
+      const payload = this.jwtService.verify(refresh_token);
 
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub, tokenVersion: payload.version },
@@ -61,7 +60,8 @@ export class AuthService {
         data: { tokenVersion: { increment: 1 } },
       });
 
-      const newPayload = { sub: user.id, version: user.tokenVersion + 1 };
+      const newPayload = { sub: user.id, version: user.tokenVersion + 1, role: user.role };
+
       const accessToken = await this.jwtService.signAsync(newPayload, {
         expiresIn: "15m",
       });
@@ -71,28 +71,16 @@ export class AuthService {
 
       return { accessToken, refreshToken };
     } catch (error: any) {
-      if (error instanceof Error && (error as any)?.response?.status === 401) {
-        throw new UnauthorizedException(
-          "Refresh Token Inválido. Erro:" + error.message,
-        );
-      } else if (
-        error instanceof Error &&
-        (error as any)?.response?.status === 404
-      ) {
-        throw new NotFoundException(
-          "Refresh Token não Informado. Erro:" + error?.message,
-        );
-      } else {
-        throw new Error(error?.message);
-      }
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      } 
+      throw new BadRequestException(error.message);
     }
   }
 
   async logout(accessToken: string) {
     try {
-      const payload = this.jwtService.verify(accessToken, {
-        secret: process.env.SECRET_KEY,
-      }); // Verifica e decodifica o token JWT
+      const payload = this.jwtService.verify(accessToken); // Verifica e decodifica o token JWT
 
       await this.prisma.user.update({
         where: { id: payload.sub },
