@@ -43,6 +43,11 @@ export class RolesGuard implements CanActivate {
       if (error.name === "TokenExpiredError") {
         throw new UnauthorizedException("Token expired");
       }
+      throw new UnauthorizedException("Invalid token");
+    }
+
+    if (!payload) {
+      throw new UnauthorizedException("Invalid token payload");
     }
 
     // Verifica a role no payload OU no banco
