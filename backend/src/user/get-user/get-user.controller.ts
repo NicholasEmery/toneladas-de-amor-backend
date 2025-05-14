@@ -4,7 +4,6 @@ import {
   HttpCode,
   UseGuards,
   Param,
-  Body,
   Request,
 } from "@nestjs/common";
 import { Role, User } from "@prisma/client";
@@ -139,7 +138,7 @@ export class GetUserController {
   @Get("email")
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getUserByEmail(@Body() getUserByEmailDto: GetUserByEmailDto): Promise<{
+  async getUserByEmail(@Param() getUserByEmailDto: GetUserByEmailDto): Promise<{
     success: string;
     user: User;
     statusCode: number;
@@ -171,7 +170,7 @@ export class GetUserController {
   @Get("phone")
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getUserByPhone(@Body() getUserByPhoneDto: GetUserByPhoneDto): Promise<{
+  async getUserByPhone(@Param() getUserByPhoneDto: GetUserByPhoneDto): Promise<{
     success: string;
     user: User;
     statusCode: number;
@@ -203,7 +202,7 @@ export class GetUserController {
   @Get("name")
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getUserByName(@Body() getUserByNameDto: GetUserByNameDto): Promise<{
+  async getUserByName(@Param() getUserByNameDto: GetUserByNameDto): Promise<{
     success: string;
     user: User;
     statusCode: number;
@@ -236,7 +235,7 @@ export class GetUserController {
   @Get("role")
   @HttpCode(200)
   @UseGuards(AuthGuard)
-  async getUserByRole(@Body() getUserByRoleDto: GetUsersByRoleDto): Promise<{
+  async getUserByRole(@Param() getUserByRoleDto: GetUsersByRoleDto): Promise<{
     success: string;
     users: User[];
     statusCode: number;
