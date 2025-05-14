@@ -18,7 +18,7 @@ export class AuthService {
   async signin(params: {
     email: string;
     password: string;
-  }): Promise<{ access_token: string; refresh_token: string }> {
+  }): Promise<{ access_token: string; refresh_token: string; role: string }> {
     const user = await this.prisma.user.findUnique({
       where: { email: params.email },
     });
@@ -30,7 +30,11 @@ export class AuthService {
     if (user.emailVerified === false)
       throw new UnauthorizedException("Email not verified");
 
-    const payload = { sub: user.id, version: user.tokenVersion, role: user.role };
+    const payload = {
+      sub: user.id,
+      version: user.tokenVersion,
+      role: user.role,
+    };
 
     const access_token = await this.jwtService.signAsync(payload, {
       expiresIn: "15m", // Tempo de expiração do access token
@@ -39,7 +43,7 @@ export class AuthService {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
-    return { access_token, refresh_token };
+    return { access_token, refresh_token, role: user.role };
   }
 
   async refreshToken(
@@ -60,7 +64,11 @@ export class AuthService {
         data: { tokenVersion: { increment: 1 } },
       });
 
-      const newPayload = { sub: user.id, version: user.tokenVersion + 1, role: user.role };
+      const newPayload = {
+        sub: user.id,
+        version: user.tokenVersion + 1,
+        role: user.role,
+      };
 
       const accessToken = await this.jwtService.signAsync(newPayload, {
         expiresIn: "15m",
@@ -73,7 +81,7 @@ export class AuthService {
     } catch (error: any) {
       if (error instanceof UnauthorizedException) {
         throw error;
-      } 
+      }
       throw new BadRequestException(error.message);
     }
   }
