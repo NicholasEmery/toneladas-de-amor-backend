@@ -20,6 +20,10 @@ export class CreateFieldsRoleUpheldDto {
   @IsNotEmpty()
   numberOfPeopleInTheHousehold!: number;
 
+  @IsString()
+  @IsNotEmpty()
+  cpf!: string;
+
   @ValidateNested()
   @Type(() => CreateAddressDto)
   @IsNotEmpty()

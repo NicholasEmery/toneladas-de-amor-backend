@@ -76,6 +76,7 @@ export class CreateUserUpheldDto {
     default: {
       employmentSituation: "Desempregado",
       numberOfPeopleInTheHousehold: 3,
+      cpf: "12345678901",
       address: {
         street: "Rua Exemplo",
         number: "123",
