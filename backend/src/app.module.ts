@@ -6,13 +6,13 @@ import { EmailVerificationModule } from "./auth/email-verification/email-verific
 import { MailModuleVerifiedEmail } from "./mail/mail-otp/mail-verified-email.module";
 import { MailResetPasswordService } from "./mail/mail-reset-password/mail-reset-password.service";
 import { MailResetPasswordModule } from "./mail/mail-reset-password/mail-reset-password.module";
-import { ProductController } from "./product/product.controller";
-import { ProductModule } from "./product/product.module";
 import { CreateUserModule } from "./user/create-user/create-user.module";
 import { JwtModule } from "@nestjs/jwt";
 import { GetUserModule } from "./user/get-user/get-user.module";
 import { DeleteUserModule } from "./user/delete-user/delete-user.module";
 import { UpdateUserModule } from "./user/update-user/update-user.module";
+import { PaymentController } from "./payment/payment.controller";
+import { PaymentModule } from "./payment/payment.module";
 
 @Module({
   imports: [
@@ -30,9 +30,10 @@ import { UpdateUserModule } from "./user/update-user/update-user.module";
     EmailVerificationModule,
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
-    ProductModule,
+
+    PaymentModule,
   ],
   providers: [MailResetPasswordService],
-  controllers: [ProductController],
+  controllers: [PaymentController],
 })
 export class AppModule {}
