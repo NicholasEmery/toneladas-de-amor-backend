@@ -26,9 +26,15 @@ async function bootstrap() {
   const customOptions: SwaggerCustomOptions = {
     customSiteTitle: "Toneladas de Amor API Docs",
   };
-  SwaggerModule.setup("api", app, documentFactory, customOptions);
+  SwaggerModule.setup("docs", app, documentFactory, customOptions);
 
-  await app.listen(process.env.PORT || 3400, "0.0.0.0");
+  const port = process.env.PORT;
+
+  if (!port) {
+    throw new Error("PORT environment variable is not set");
+  }
+
+  await app.listen(port, "0.0.0.0");
 
   const url = await app.getUrl();
   Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
