@@ -27,8 +27,8 @@ export class AuthService {
     const passwordMatch = await bcrypt.compare(params.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
-    if (user.emailVerified === false)
-      throw new UnauthorizedException("Email not verified");
+    // if (user.emailVerified === false)
+    //   throw new UnauthorizedException("Email not verified");
 
     const payload = {
       sub: user.id,
