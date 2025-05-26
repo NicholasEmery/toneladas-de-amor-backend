@@ -13,7 +13,7 @@ function removePassword(obj: any): any {
   }
   if (obj && typeof obj === "object") {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, password, ...rest } = obj;
+    const { password, ...rest } = obj;
     for (const key in rest) {
       rest[key] = removePassword(rest[key]);
     }
