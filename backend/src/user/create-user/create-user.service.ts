@@ -23,19 +23,19 @@ export class CreateUserService {
     const { name, email, password, phone, role, fieldsRole } =
       createUserUpheldDto;
 
-    const existingEmail = await this.prisma.user.findUnique({
-      where: { email: email },
-    });
+    // const existingEmail = await this.prisma.user.findUnique({
+    //   where: { email: email },
+    // });
 
-    if (existingEmail) {
-      throw new BadRequestException("User already exists");
-    }
-    const existingPhone = await this.prisma.user.findUnique({
-      where: { phone: phone },
-    });
-    if (existingPhone) {
-      throw new BadRequestException("Phone number already exists");
-    }
+    // if (existingEmail) {
+    //   throw new BadRequestException("User already exists");
+    // }
+    // const existingPhone = await this.prisma.user.findUnique({
+    //   where: { phone: phone },
+    // });
+    // if (existingPhone) {
+    //   throw new BadRequestException("Phone number already exists");
+    // }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -76,19 +76,19 @@ export class CreateUserService {
     const { name, email, password, phone, role, fieldsRole } =
       createUserDonatorDto;
 
-    const existingEmail = await this.prisma.user.findUnique({
-      where: { email: email },
-    });
+    // const existingEmail = await this.prisma.user.findUnique({
+    //   where: { email: email },
+    // });
 
-    if (existingEmail) {
-      throw new BadRequestException("User already exists");
-    }
-    const existingPhone = await this.prisma.user.findUnique({
-      where: { phone: phone },
-    });
-    if (existingPhone) {
-      throw new BadRequestException("Phone number already exists");
-    }
+    // if (existingEmail) {
+    //   throw new BadRequestException("User already exists");
+    // }
+    // const existingPhone = await this.prisma.user.findUnique({
+    //   where: { phone: phone },
+    // });
+    // if (existingPhone) {
+    //   throw new BadRequestException("Phone number already exists");
+    // }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -142,19 +142,19 @@ export class CreateUserService {
       const { name, email, password, phone, role, fieldsRole } =
         createUserColaboratorDto;
 
-      const existingEmail = await this.prisma.user.findUnique({
-        where: { email: email },
-      });
+      // const existingEmail = await this.prisma.user.findUnique({
+      //   where: { email: email },
+      // });
 
-      if (existingEmail) {
-        throw new BadRequestException("User already exists");
-      }
-      const existingPhone = await this.prisma.user.findUnique({
-        where: { phone: phone },
-      });
-      if (existingPhone) {
-        throw new BadRequestException("Phone number already exists");
-      }
+      // if (existingEmail) {
+      //   throw new BadRequestException("User already exists");
+      // }
+      // const existingPhone = await this.prisma.user.findUnique({
+      //   where: { phone: phone },
+      // });
+      // if (existingPhone) {
+      //   throw new BadRequestException("Phone number already exists");
+      // }
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -197,19 +197,19 @@ export class CreateUserService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const { name, email, password, phone, role } = createUserAdminDto;
 
-    const existingEmail = await this.prisma.user.findUnique({
-      where: { email: email },
-    });
+    // const existingEmail = await this.prisma.user.findUnique({
+    //   where: { email: email },
+    // });
 
-    if (existingEmail) {
-      throw new BadRequestException("User already exists");
-    }
-    const existingPhone = await this.prisma.user.findUnique({
-      where: { phone: phone },
-    });
-    if (existingPhone) {
-      throw new BadRequestException("Phone number already exists");
-    }
+    // if (existingEmail) {
+    //   throw new BadRequestException("User already exists");
+    // }
+    // const existingPhone = await this.prisma.user.findUnique({
+    //   where: { phone: phone },
+    // });
+    // if (existingPhone) {
+    //   throw new BadRequestException("Phone number already exists");
+    // }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
