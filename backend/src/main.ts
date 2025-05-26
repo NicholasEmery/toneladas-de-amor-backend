@@ -7,9 +7,11 @@ import {
   SwaggerCustomOptions,
 } from "@nestjs/swagger";
 import { version } from "../package.json";
+import { RemovePasswordInterceptor } from "./common/interceptors/remove-field-req.interceptor";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalInterceptors(new RemovePasswordInterceptor());
   const isProduction = process.env.NODE_ENV === "production";
   app.enableCors({
     origin: isProduction ? process.env.URL_FRONTEND : true,
@@ -37,6 +39,6 @@ async function bootstrap() {
   await app.listen(port, "0.0.0.0");
 
   const url = await app.getUrl();
-  Logger.log(`Documentation is running on: ${url}/api`, "Documentation");
+  Logger.log(`Documentation is running on: ${url}/docs`, "Documentation");
 }
 bootstrap();
