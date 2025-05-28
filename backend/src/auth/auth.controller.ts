@@ -49,15 +49,18 @@ export class AuthController {
   async signin(@Body() data: SignInDto): Promise<{
     message: string;
     role: string;
+    name: string;
     access_token: string;
     refresh_token: string;
     statusCode: number;
   }> {
-    const { access_token, refresh_token, role } = await this.authService.signin(data);
+    const { access_token, refresh_token, role, name } =
+      await this.authService.signin(data);
 
     return {
       message: "Usuário autenticado com sucesso.",
       role: role,
+      name: name,
       access_token,
       refresh_token,
       statusCode: 200,

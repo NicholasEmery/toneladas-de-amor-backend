@@ -54,7 +54,6 @@ export class CreateUserService {
     const payload = {
       sub: user.id,
       version: user.tokenVersion,
-      role: user.role,
     };
 
     const access_token = await this.jwtService.signAsync(payload, {
@@ -107,7 +106,6 @@ export class CreateUserService {
     const payload = {
       sub: user.id,
       version: user.tokenVersion,
-      role: user.role,
     };
 
     const access_token = await this.jwtService.signAsync(payload, {
@@ -173,7 +171,6 @@ export class CreateUserService {
       const payload = {
         sub: user.id,
         version: user.tokenVersion,
-        role: user.role,
       };
 
       const access_token = await this.jwtService.signAsync(payload, {
@@ -227,7 +224,6 @@ export class CreateUserService {
     const payload = {
       sub: user.id,
       version: user.tokenVersion,
-      role: user.role,
     };
 
     const access_token = await this.jwtService.signAsync(payload, {

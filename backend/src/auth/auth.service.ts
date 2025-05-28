@@ -15,10 +15,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signin(params: {
-    email: string;
-    password: string;
-  }): Promise<{ access_token: string; refresh_token: string; role: string }> {
+  async signin(params: { email: string; password: string }): Promise<{
+    access_token: string;
+    refresh_token: string;
+    role: string;
+    name: string;
+  }> {
     const user = await this.prisma.user.findUnique({
       where: { email: params.email },
     });
@@ -33,7 +35,6 @@ export class AuthService {
     const payload = {
       sub: user.id,
       version: user.tokenVersion,
-      role: user.role,
     };
 
     const access_token = await this.jwtService.signAsync(payload, {
@@ -43,7 +44,7 @@ export class AuthService {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
-    return { access_token, refresh_token, role: user.role };
+    return { access_token, refresh_token, role: user.role, name: user.name };
   }
 
   async refreshToken(
@@ -67,7 +68,6 @@ export class AuthService {
       const newPayload = {
         sub: user.id,
         version: user.tokenVersion + 1,
-        role: user.role,
       };
 
       const accessToken = await this.jwtService.signAsync(newPayload, {

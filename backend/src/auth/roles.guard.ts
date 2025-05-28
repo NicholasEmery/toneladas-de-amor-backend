@@ -50,19 +50,6 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException("Invalid token payload");
     }
 
-    // Verifica a role no payload OU no banco
-    if (!requiredRoles.includes(payload.role)) {
-      // Se quiser garantir que o usuário ainda é ADMIN no banco:
-      const user = await this.prisma.user.findUnique({
-        where: { id: payload.sub },
-      });
-      if (!user || !requiredRoles.includes(user.role)) {
-        throw new UnauthorizedException(
-          "You do not have permission to perform this request.",
-        );
-      }
-    }
-
     request.user = payload;
     return true;
   }
