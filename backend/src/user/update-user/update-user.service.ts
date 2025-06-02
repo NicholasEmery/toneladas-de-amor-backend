@@ -2,11 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from "@nestjs/common";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import { UpdateUserUpheldDto } from "../dto/updateUser/updateUserUpheld.dto";
 import { User } from "@prisma/client";
+import { InputJsonValue } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
+import { UpdateUserDonatorDto } from "../dto/updateUser/updateUserDonator.dto";
+import { UpdateUserColaboratorDto } from "../dto/updateUser/updateUserColaborator.dto";
+import { UpdateUserAdminDto } from "../dto/updateUser/updateUserAdmin.dto";
 
 @Injectable()
 export class UpdateUserService {
@@ -17,13 +21,14 @@ export class UpdateUserService {
     updateUserUpheldDto: UpdateUserUpheldDto,
   ): Promise<User> {
     try {
-      const { fieldsRole, ...updateData } = updateUserUpheldDto;
+      const { fieldsRole } = updateUserUpheldDto;
 
       const user = await this.prisma.user.update({
         where: { id: userId },
         data: {
-          ...updateData,
-          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
+          fieldsRole: JSON.parse(
+            JSON.stringify(fieldsRole),
+          ) as Prisma.InputJsonValue,
         },
       });
 
@@ -32,17 +37,17 @@ export class UpdateUserService {
       }
 
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 
   async updateUserDonator(
     userId: string,
-    updateUserDonatorDto: any,
+    updateUserDonatorDto: UpdateUserDonatorDto,
   ): Promise<User> {
     try {
       const { fieldsRole, ...updateData } = updateUserDonatorDto;
@@ -51,7 +56,7 @@ export class UpdateUserService {
         where: { id: userId },
         data: {
           ...updateData,
-          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
+          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)) as InputJsonValue,
         },
       });
 
@@ -60,17 +65,17 @@ export class UpdateUserService {
       }
 
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 
   async updateUserColaborator(
     userId: string,
-    updateUserColaboratorDto: any,
+    updateUserColaboratorDto: UpdateUserColaboratorDto,
   ): Promise<User> {
     try {
       const { fieldsRole, ...updateData } = updateUserColaboratorDto;
@@ -79,7 +84,7 @@ export class UpdateUserService {
         where: { id: userId },
         data: {
           ...updateData,
-          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
+          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)) as InputJsonValue,
         },
       });
 
@@ -88,17 +93,17 @@ export class UpdateUserService {
       }
 
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 
   async updateUserAdmin(
     userId: string,
-    updateUserAdminDto: any,
+    updateUserAdminDto: UpdateUserAdminDto,
   ): Promise<User> {
     try {
       const { ...updateData } = updateUserAdminDto;
@@ -115,11 +120,11 @@ export class UpdateUserService {
       }
 
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 }

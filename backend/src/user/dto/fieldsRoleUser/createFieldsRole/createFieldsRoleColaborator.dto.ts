@@ -1,10 +1,7 @@
 import {
-  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsObject,
   IsString,
-  Validate,
   ValidateNested,
 } from "class-validator";
 import { CreateAddressDto } from "./createAddressUser/createAddress.dto";

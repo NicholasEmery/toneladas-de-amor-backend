@@ -1,4 +1,5 @@
 import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
+import { Response } from "express";
 import { EmailResetPasswordService } from "./email-reset-password.service";
 import { SendEmailDto } from "./dto/sendEmail.dto";
 import { VerifyTokenDto } from "./dto/verifyToken.dto";
@@ -13,11 +14,10 @@ export class EmailResetPasswordController {
   @HttpCode(200)
   async sendEmail(
     @Body() sendEmailDto: SendEmailDto,
-    @Res() res: any,
+    @Res() res: Response,
   ): Promise<{ success: string; statusCode: number }> {
-    const resetPasswordToken = await this.emailResetPasswordService.sendEmail(
-      sendEmailDto.email,
-    );
+    const { resetPasswordToken } =
+      await this.emailResetPasswordService.sendEmail(sendEmailDto.email);
 
     res.cookie("resetPasswordToken", resetPasswordToken, {
       httpOnly: true,

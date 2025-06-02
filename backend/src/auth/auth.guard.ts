@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../database/prisma.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -43,8 +43,8 @@ export class AuthGuard implements CanActivate {
       request.user = user;
 
       return true;
-    } catch (error: any) {
-      if (error.name === "TokenExpiredError") {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "TokenExpiredError") {
         throw new UnauthorizedException("Token has expired");
       }
       throw new UnauthorizedException("Invalid token");

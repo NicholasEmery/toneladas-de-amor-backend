@@ -1,30 +1,25 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from "@nestjs/common";
+import { CallHandler, ExecutionContext, NestInterceptor } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-function removePassword(obj: any): any {
-  if (Array.isArray(obj)) {
-    return obj.map(removePassword);
+function removePasswordField(data: unknown): unknown {
+  if (Array.isArray(data)) {
+    return data.map(removePasswordField);
   }
-  if (obj && typeof obj === "object") {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...rest } = obj;
+  if (data && typeof data === "object" && data !== null) {
+    const { password, ...rest } = data as Record<string, unknown>;
     for (const key in rest) {
-      rest[key] = removePassword(rest[key]);
+      rest[key] = removePasswordField(rest[key]);
     }
     return rest;
   }
-  return obj;
+  return data;
 }
 
-@Injectable()
 export class RemovePasswordInterceptor implements NestInterceptor {
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(map((data) => removePassword(data)));
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    return next
+      .handle()
+      .pipe(map((data: unknown) => removePasswordField(data)));
   }
 }

@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../database/prisma.service";
 
 @Injectable()
 export class AuthService {
@@ -78,11 +78,11 @@ export class AuthService {
       });
 
       return { accessToken, refreshToken };
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 

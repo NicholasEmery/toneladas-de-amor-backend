@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { CreateUserUpheldDto } from "../dto/createUser/createUserUpheld.dto";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import * as bcrypt from "bcrypt";
 import { CreateUserDonatorDto } from "../dto/createUser/createUserDonator.dto";
 import { CreateUserColaboratorDto } from "../dto/createUser/createUserColaborator.dto";

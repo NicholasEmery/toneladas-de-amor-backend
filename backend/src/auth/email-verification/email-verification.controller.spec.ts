@@ -1,6 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { EmailVerificationController } from "./email-verification.controller";
 import { EmailVerificationService } from "./email-verification.service";
+import { PrismaService } from "../../database/prisma.service";
 
 describe("EmailVerificationController", () => {
   let controller: EmailVerificationController;
@@ -8,7 +9,10 @@ describe("EmailVerificationController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EmailVerificationController],
-      providers: [EmailVerificationService],
+      providers: [
+        EmailVerificationService,
+        { provide: PrismaService, useValue: {} },
+      ],
     }).compile();
 
     controller = module.get<EmailVerificationController>(

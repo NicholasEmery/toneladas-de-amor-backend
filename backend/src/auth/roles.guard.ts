@@ -7,7 +7,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Role } from "@prisma/client";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../database/prisma.service";
 import { ROLES_KEY } from "./roles.decorator";
 import { error } from "console";
 

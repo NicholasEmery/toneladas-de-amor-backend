@@ -39,7 +39,7 @@ export class UpdateUserController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateUser(
-    @Request() req: any,
+    @Request() req: Request & { user: { id: string } },
     @Body() updateUserUpheldDto: UpdateUserUpheldDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
@@ -71,7 +71,7 @@ export class UpdateUserController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateUserDonator(
-    @Request() req: any,
+    @Request() req: Request & { user: { id: string } },
     @Body() updateUserDonatorDto: UpdateUserDonatorDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
@@ -102,7 +102,7 @@ export class UpdateUserController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateUserColaborator(
-    @Request() req: any,
+    @Request() req: Request & { user: { id: string } },
     @Body() updateUserColaboratorDto: UpdateUserColaboratorDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
@@ -133,7 +133,7 @@ export class UpdateUserController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async updateUserAdmin(
-    @Request() req: any,
+    @Request() req: Request & { user: { id: string } },
     @Body() updateUserAdminDto: UpdateUserAdminDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;

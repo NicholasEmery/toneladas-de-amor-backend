@@ -3,24 +3,22 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 
 @Injectable()
 export class DeleteUserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async deleteUser(userId: string): Promise<boolean> {
+  async deleteUser(userId: string): Promise<void> {
     try {
       await this.prisma.user.delete({
         where: { id: userId },
       });
-
-      return true;  
-    } catch (error: any) {
-      if (error.name === "NotFoundError") {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "NotFoundError") {
         throw new NotFoundException("User not found");
       }
-      throw new BadRequestException(error.message);
+      throw new BadRequestException((error as Error).message);
     }
   }
 }

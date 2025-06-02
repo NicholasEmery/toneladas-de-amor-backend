@@ -7,8 +7,8 @@ import { firstValueFrom } from "rxjs";
 export class PaymentService {
   constructor(private readonly httpService: HttpService) {}
 
-  async createCheckout(data: any) {
-    const url = "https://api.asaas.com/api/v3/checkouts";
+  async createCheckout(data: Record<string, unknown>) {
+    const url = "https://api-sandbox.asaas.com/v3/checkouts";
     const headers = {
       "Content-Type": "application/json",
       "access_token": process.env.ASAAS_API_KEY,
@@ -19,11 +19,17 @@ export class PaymentService {
         this.httpService.post(url, data, { headers }),
       );
       return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMsg = "Erro ao criar checkout";
+      let errorData = error;
+      if (typeof error === "object" && error !== null && "response" in error) {
+        // @ts-expect-error: acesso seguro para response.data
+        errorData = error.response?.data || error;
+      }
       return {
         success: false,
-        message: "Erro ao criar checkout",
-        error: error.response?.data || error.message,
+        message: errorMsg,
+        error: errorData,
       };
     }
   }

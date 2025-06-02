@@ -1,6 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { Role } from "@prisma/client";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 
 @Injectable()
 export class GetUserService {
@@ -19,11 +23,10 @@ export class GetUserService {
       }
 
       return user;
-        } catch (error) {
+    } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      console.error(error);
       throw new Error("Error fetching user by ID");
     }
   }

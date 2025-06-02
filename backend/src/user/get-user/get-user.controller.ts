@@ -6,6 +6,7 @@ import {
   Param,
   Request,
 } from "@nestjs/common";
+import { Request as ExpressRequest } from "express";
 import { Role, User } from "@prisma/client";
 import { AuthGuard } from "src/auth/auth.guard";
 import { GetUserService } from "./get-user.service";
@@ -40,10 +41,11 @@ export class GetUserController {
   })
   @ApiBearerAuth()
   @Get("by-token")
-  @HttpCode(200)
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard, AuthGuard)
-  async getUserByIdToken(@Request() req: any): Promise<{
+  async getUserByIdToken(
+    @Request() req: ExpressRequest & { user: any },
+  ): Promise<{
     success: string;
     user: User;
     statusCode: number;
@@ -175,7 +177,6 @@ export class GetUserController {
   }> {
     const { name } = getUserByNameDto;
 
-
     const user = await this.getUserService.getUserByName(name);
 
     return {
@@ -207,7 +208,6 @@ export class GetUserController {
     statusCode: number;
   }> {
     const { role } = getUserByRoleDto;
-
 
     const users = await this.getUserService.getUserByRole(role);
 
@@ -242,8 +242,33 @@ export class GetUserController {
   }> {
     const { userId } = getUserByIdDto;
 
-
     const user = await this.getUserService.getUserById(userId);
+
+    return {
+      success: "Usuário encontrado com sucesso.",
+      user,
+      statusCode: 200,
+    };
+  }
+
+  @ApiOperation({
+    summary: "Busca usuário por ID",
+    description: "Busca usuário por ID",
+  })
+  @ApiUnauthorizedResponse({
+    description: "Token inválido ou não fornecido",
+    example: {
+      message: "Token inválido ou não fornecido",
+      error: "Unauthorized",
+      statusCode: 401,
+    },
+  })
+  @ApiBearerAuth()
+  @Get("by-id/:id")
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  async getUser(@Param("id") id: string): Promise<unknown> {
+    const user = await this.getUserService.getUserById(id);
 
     return {
       success: "Usuário encontrado com sucesso.",
