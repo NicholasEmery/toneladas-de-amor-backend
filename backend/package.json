@@ -1,6 +1,6 @@
 {
   "name": "api-toneladas-de-amor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "API para o projeto Toneladas de Amor, desenvolvido em NestJS e Prisma.",
   "author": "NicholasEmery",
   "private": true,
