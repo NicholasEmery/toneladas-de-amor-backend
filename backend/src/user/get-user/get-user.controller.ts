@@ -6,9 +6,8 @@ import {
   Param,
   Request,
 } from "@nestjs/common";
-import { Request as ExpressRequest } from "express";
 import { Role, User } from "@prisma/client";
-import { AuthGuard } from "src/auth/auth.guard";
+import { AuthGuard } from "../../auth/auth.guard";
 import { GetUserService } from "./get-user.service";
 import { GetUserByIdDto } from "../dto/getUser/getUserById.dto";
 import { GetUserByEmailDto } from "../dto/getUser/getUserByEmail.dto";
@@ -20,8 +19,8 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { RolesGuard } from "src/auth/roles.guard";
-import { Roles } from "src/auth/roles.decorator";
+import { RolesGuard } from "../../auth/roles.guard";
+import { Roles } from "../../auth/roles.decorator";
 
 @Controller("get-user")
 export class GetUserController {
@@ -43,9 +42,7 @@ export class GetUserController {
   @Get("by-token")
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard, AuthGuard)
-  async getUserByIdToken(
-    @Request() req: ExpressRequest & { user: any },
-  ): Promise<{
+  async getUserByIdToken(@Request() req: { user: { id: string } }): Promise<{
     success: string;
     user: User;
     statusCode: number;

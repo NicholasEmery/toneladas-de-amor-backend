@@ -3,6 +3,7 @@ import { AuthService } from "./auth.service";
 import { PrismaService } from "../database/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+jest.mock("bcrypt");
 import {
   UnauthorizedException,
   NotFoundException,
@@ -43,6 +44,7 @@ describe("AuthService", () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
+    (bcrypt.compare as jest.Mock).mockReset();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -57,9 +59,7 @@ describe("AuthService", () => {
 
   it("deve autenticar usuário com sucesso", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(mockUser);
-    const bcryptCompareSpy = jest
-      .spyOn(bcrypt, "compare")
-      .mockImplementation(() => Promise.resolve(true));
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
     const result = await service.signin({
       email: mockUser.email,
       password: "123456",
@@ -68,11 +68,11 @@ describe("AuthService", () => {
     expect(result.refresh_token).toBe("jwt-token");
     expect(result.role).toBe("DONATOR");
     expect(result.name).toBe("Test User");
-    bcryptCompareSpy.mockRestore();
   });
 
   it("deve lançar NotFoundException se usuário não existir", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(null);
+    (bcrypt.compare as jest.Mock).mockResolvedValue(false);
     await expect(
       service.signin({ email: "notfound@example.com", password: "123456" }),
     ).rejects.toThrow(NotFoundException);
@@ -80,13 +80,10 @@ describe("AuthService", () => {
 
   it("deve lançar UnauthorizedException se senha for inválida", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(mockUser);
-    const bcryptCompareSpy = jest
-      .spyOn(bcrypt, "compare")
-      .mockImplementation(() => Promise.resolve(false));
+    (bcrypt.compare as jest.Mock).mockResolvedValue(false);
     await expect(
       service.signin({ email: mockUser.email, password: "wrong" }),
     ).rejects.toThrow(UnauthorizedException);
-    bcryptCompareSpy.mockRestore();
   });
 
   it("deve lançar UnauthorizedException se email não verificado", async () => {
@@ -94,13 +91,10 @@ describe("AuthService", () => {
       ...mockUser,
       emailVerified: false,
     });
-    const bcryptCompareSpy = jest
-      .spyOn(bcrypt, "compare")
-      .mockImplementation(() => Promise.resolve(true));
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
     await expect(
       service.signin({ email: mockUser.email, password: "123456" }),
     ).rejects.toThrow(UnauthorizedException);
-    bcryptCompareSpy.mockRestore();
   });
 
   it("deve atualizar token com sucesso", async () => {

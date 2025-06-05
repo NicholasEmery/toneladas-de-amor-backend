@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { UpdateUserService } from "./update-user.service";
 import { UpdateUserUpheldDto } from "../dto/updateUser/updateUserUpheld.dto";
-import { AuthGuard } from "src/auth/auth.guard";
+import { AuthGuard } from "../../auth/auth.guard";
 import { UpdateUserDonatorDto } from "../dto/updateUser/updateUserDonator.dto";
 import { UpdateUserColaboratorDto } from "../dto/updateUser/updateUserColaborator.dto";
 import { UpdateUserAdminDto } from "../dto/updateUser/updateUserAdmin.dto";

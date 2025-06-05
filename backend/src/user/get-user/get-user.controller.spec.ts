@@ -1,10 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { GetUserController } from "./get-user.controller";
 import { GetUserService } from "./get-user.service";
-import { AuthGuard } from "src/auth/auth.guard";
-import { RolesGuard } from "src/auth/roles.guard";
+import { AuthGuard } from "../../auth/auth.guard";
+import { RolesGuard } from "../../auth/roles.guard";
 import { Role, User } from "@prisma/client";
-import { Request } from "express";
 
 type GetUserByIdTokenReturn = {
   success: string;
@@ -72,12 +71,10 @@ describe("GetUserController", () => {
   });
 
   it("deve buscar usuário por ID do token", async () => {
-    const req = {
-      user: { id: "user-id" },
-    };
+    const req = { user: { id: "user-id" } } as { user: { id: string } };
 
     const result = (await controller.getUserByIdToken(
-      req as any,
+      req,
     )) as GetUserByIdTokenReturn;
     expect(result.success).toBe("Usuário encontrado com sucesso.");
     expect(result.user).toEqual(mockUser);

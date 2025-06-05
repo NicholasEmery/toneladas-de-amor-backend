@@ -1,9 +1,9 @@
 import { Controller, Delete, Param, HttpCode, UseGuards } from "@nestjs/common";
 import { DeleteUserService } from "./delete-user.service";
 import { DeleteUserByIdDto } from "../dto/deleteUser/deleteUserById.dto";
-import { RolesGuard } from "src/auth/roles.guard";
-import { AuthGuard } from "src/auth/auth.guard";
-import { Roles } from "src/auth/roles.decorator";
+import { RolesGuard } from "../../auth/roles.guard";
+import { AuthGuard } from "../../auth/auth.guard";
+import { Roles } from "../../auth/roles.decorator";
 import { Role } from "@prisma/client";
 import {
   ApiBearerAuth,

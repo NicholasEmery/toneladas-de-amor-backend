@@ -7,7 +7,10 @@ function removePasswordField(data: unknown): unknown {
     return data.map(removePasswordField);
   }
   if (data && typeof data === "object" && data !== null) {
-    const { password, ...rest } = data as Record<string, unknown>;
+    const rest = { ...(data as Record<string, unknown>) };
+    if ("password" in rest) {
+      delete rest.password;
+    }
     for (const key in rest) {
       rest[key] = removePasswordField(rest[key]);
     }
