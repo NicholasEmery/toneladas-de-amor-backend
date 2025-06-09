@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/NicholasEmery/api-toneladas-de-amor/compare/v0.0.4...v0.0.5) (2025-06-09)
+
+
+### Testes
+
+* **corrigir importações de módulos e melhorar testes de unidade e integração:** :white_check_mark: ([493058e](https://github.com/NicholasEmery/api-toneladas-de-amor/commit/493058ebbab50a6e5309f60788f1756369848a5b))
+
+
+### Novas funcionalidades
+
+* adicionar módulo e controlador de histórico de pagamentos, implementar serviço para obter pagamentos recebidos ([5b3cb03](https://github.com/NicholasEmery/api-toneladas-de-amor/commit/5b3cb03f65db8f56e2e7d98013a779bc288ffa0e))
+
+
+### Refatoração
+
+* ajustar propriedades de exemplo e validação nos DTOs de checkout, garantindo suporte a arrays ([4a5a767](https://github.com/NicholasEmery/api-toneladas-de-amor/commit/4a5a76700fe3d0a61178476fafe9da087b30e160))
+* remove payment module and related files, introduce checkout module with payment functionalities ([2b75471](https://github.com/NicholasEmery/api-toneladas-de-amor/commit/2b754716a4d4fd66322b9f4cdb64f6eaaa12afb8))
+
 ### [0.0.4](https://github.com/NicholasEmery/api-toneladas-de-amor/compare/v0.0.3...v0.0.4) (2025-06-02)
 
 ### [0.0.3](https://github.com/NicholasEmery/api-toneladas-de-amor/compare/v0.0.2...v0.0.3) (2025-06-02)
