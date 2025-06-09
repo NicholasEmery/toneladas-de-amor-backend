@@ -49,24 +49,40 @@ export class CreateCheckoutRecurrentDto {
   })
   minutesToExpire!: number;
 
+  @ApiProperty({
+    description: "Valor total da cobrança em centavos.",
+    type: FieldsCallBackDto,
+  })
   @ValidateNested()
   @Type(() => FieldsCallBackDto)
   @IsNotEmpty()
   @IsObject()
   callback!: FieldsCallBackDto;
 
+  @ApiProperty({
+    description: "Itens da cobrança.",
+    type: FieldsItemsDto,
+  })
   @ValidateNested()
   @Type(() => FieldsItemsDto)
   @IsNotEmpty()
   @IsObject()
   items!: FieldsItemsDto;
 
+  @ApiProperty({
+    description: "Dados do cliente.",
+    type: FieldsCustomerDataDto,
+  })
   @ValidateNested()
   @Type(() => FieldsCustomerDataDto)
   @IsNotEmpty()
   @IsObject()
   customerData!: FieldsCustomerDataDto;
 
+  @ApiProperty({
+    description: "Dados da assinatura.",
+    type: FieldsSubscriptionDto,
+  })
   @ValidateNested()
   @Type(() => FieldsSubscriptionDto)
   @IsNotEmpty()

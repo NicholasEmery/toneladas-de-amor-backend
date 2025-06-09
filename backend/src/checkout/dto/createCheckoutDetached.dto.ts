@@ -51,18 +51,31 @@ export class CreateCheckoutDetachedDto {
   })
   minutesToExpire!: number;
 
+  @ApiProperty({
+    description: "URL de retorno após a finalização do checkout.",
+    type: FieldsCallBackDto,
+  })
   @ValidateNested()
   @Type(() => FieldsCallBackDto)
   @IsNotEmpty()
   @IsObject()
   callback!: FieldsCallBackDto;
 
+  @ApiProperty({
+    description:
+      "Itens do checkout, incluindo detalhes como ID, nome, quantidade e valor.",
+    type: FieldsItemsDto,
+  })
   @ValidateNested()
   @Type(() => FieldsItemsDto)
   @IsNotEmpty()
   @IsObject()
   items!: FieldsItemsDto;
 
+  @ApiProperty({
+    description: "Dados do cliente, incluindo informações como nome e email.",
+    type: FieldsCustomerDataDto,
+  })
   @ValidateNested()
   @Type(() => FieldsCustomerDataDto)
   @IsNotEmpty()

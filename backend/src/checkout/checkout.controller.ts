@@ -6,7 +6,6 @@ import { CreateCheckoutDetachedDto } from "./dto/createCheckoutDetached.dto";
 import { CreateCheckoutRecurrentDto } from "./dto/createCheckoutRecurrent.dto";
 import { CancelCheckoutByIdDto } from "./dto/cancelCheckoutById.dto";
 
-@ApiTags("checkout")
 @ApiBearerAuth()
 @Controller("checkout")
 export class CheckoutController {

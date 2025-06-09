@@ -12,6 +12,8 @@ import { GetUserModule } from "./user/get-user/get-user.module";
 import { DeleteUserModule } from "./user/delete-user/delete-user.module";
 import { UpdateUserModule } from "./user/update-user/update-user.module";
 import { CheckoutModule } from "./checkout/checkout.module";
+import { HistoryPaymentController } from "./history-payment/history-payment.controller";
+import { HistoryPaymentModule } from "./history-payment/history-payment.module";
 
 @Module({
   imports: [
@@ -30,7 +32,9 @@ import { CheckoutModule } from "./checkout/checkout.module";
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
     CheckoutModule,
+    HistoryPaymentModule,
   ],
   providers: [MailResetPasswordService],
+  controllers: [HistoryPaymentController],
 })
 export class AppModule {}

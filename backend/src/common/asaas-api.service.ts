@@ -20,4 +20,11 @@ export class AsaasApiService {
       headers: this.getHeaders(),
     });
   }
+
+  get<T = unknown>(endpoint: string, params?: Record<string, unknown>) {
+    return this.httpService.get<T>(`${this.baseUrl}${endpoint}`, {
+      headers: this.getHeaders(),
+      params,
+    });
+  }
 }
