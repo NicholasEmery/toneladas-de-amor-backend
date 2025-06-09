@@ -11,8 +11,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { GetUserModule } from "./user/get-user/get-user.module";
 import { DeleteUserModule } from "./user/delete-user/delete-user.module";
 import { UpdateUserModule } from "./user/update-user/update-user.module";
-import { PaymentController } from "./payment/payment.controller";
-import { PaymentModule } from "./payment/payment.module";
+import { CheckoutModule } from "./checkout/checkout.module";
 
 @Module({
   imports: [
@@ -30,10 +29,8 @@ import { PaymentModule } from "./payment/payment.module";
     EmailVerificationModule,
     MailModuleVerifiedEmail,
     MailResetPasswordModule,
-
-    PaymentModule,
+    CheckoutModule,
   ],
   providers: [MailResetPasswordService],
-  controllers: [PaymentController],
 })
 export class AppModule {}
