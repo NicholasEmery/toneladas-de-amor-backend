@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -25,18 +26,27 @@ enum ChargeType {
 export class CreateCheckoutRecurrentDto {
   @ApiProperty({
     description: "Tipo de cobrança. Apenas CREDIT_CARD é suportado.",
-    example: BillingType.CREDIT_CARD,
+    example: [BillingType.CREDIT_CARD],
+    isArray: true,
+    enum: BillingType,
+    type: [String],
   })
-  @IsEnum(BillingType)
-  billingTypes!: BillingType;
+  @IsEnum(BillingType, { each: true })
+  @IsArray()
+  @IsNotEmpty()
+  billingTypes!: BillingType[];
 
   @ApiProperty({
     description: "Tipo de recorrência da cobrança.",
-    example: ChargeType.RECURRENT,
+    example: [ChargeType.RECURRENT],
+    isArray: true,
+    enum: ChargeType,
+    type: [String],
   })
-  @IsEnum(ChargeType)
+  @IsEnum(ChargeType, { each: true })
+  @IsArray()
   @IsNotEmpty()
-  chargeTypes!: ChargeType;
+  chargeTypes!: ChargeType[];
 
   @ApiProperty({
     description: "Minutos até a expiração do checkout. Mínimo de 10 minutos.",
@@ -61,13 +71,14 @@ export class CreateCheckoutRecurrentDto {
 
   @ApiProperty({
     description: "Itens da cobrança.",
+    isArray: true,
     type: FieldsItemsDto,
   })
   @ValidateNested()
   @Type(() => FieldsItemsDto)
   @IsNotEmpty()
-  @IsObject()
-  items!: FieldsItemsDto;
+  @IsArray()
+  items!: FieldsItemsDto[];
 
   @ApiProperty({
     description: "Dados do cliente.",

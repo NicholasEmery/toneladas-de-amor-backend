@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -24,20 +25,27 @@ enum ChargeType {
 export class CreateCheckoutDetachedDto {
   @ApiProperty({
     description: "Tipo de cobrança. Atualmente apenas CREDIT_CARD é suportado.",
-    example: BillingType.CREDIT_CARD,
+    example: [BillingType.CREDIT_CARD],
+    isArray: true,
     enum: BillingType,
+    type: [String],
   })
-  @IsEnum(BillingType)
-  billingTypes!: BillingType;
+  @IsEnum(BillingType, { each: true })
+  @IsArray()
+  @IsNotEmpty()
+  billingTypes!: BillingType[];
 
   @ApiProperty({
     description: "Tipo de charge. Pode ser DETACHED ou RECURRENT.",
-    example: ChargeType.DETACHED,
+    example: [ChargeType.DETACHED],
+    isArray: true,
     enum: ChargeType,
+    type: [String],
   })
-  @IsEnum(ChargeType)
+  @IsEnum(ChargeType, { each: true })
+  @IsArray()
   @IsNotEmpty()
-  chargeTypes!: ChargeType;
+  chargeTypes!: ChargeType[];
 
   @ApiProperty({
     description: "Minutos até expirar o checkout. Valor mínimo: 10.",
@@ -64,13 +72,14 @@ export class CreateCheckoutDetachedDto {
   @ApiProperty({
     description:
       "Itens do checkout, incluindo detalhes como ID, nome, quantidade e valor.",
+    isArray: true,
     type: FieldsItemsDto,
   })
   @ValidateNested()
   @Type(() => FieldsItemsDto)
   @IsNotEmpty()
-  @IsObject()
-  items!: FieldsItemsDto;
+  @IsArray()
+  items!: FieldsItemsDto[];
 
   @ApiProperty({
     description: "Dados do cliente, incluindo informações como nome e email.",
