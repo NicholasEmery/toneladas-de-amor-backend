@@ -23,7 +23,7 @@ export class FieldsCustomerDataDto {
 
   @ApiProperty({
     description: "CPF or CNPJ number (11 or 14 digits)",
-    example: "12345678901",
+    example: "73761704054",
   })
   @IsString()
   @Length(11, 14, {
@@ -43,7 +43,7 @@ export class FieldsCustomerDataDto {
 
   @ApiProperty({
     description: "Customer's phone number in Brazilian format",
-    example: "+5511999999999",
+    example: "8325779357",
   })
   @IsString()
   @IsPhoneNumber("BR")
@@ -95,7 +95,7 @@ export class FieldsCustomerDataDto {
 
   @ApiProperty({
     description: "Postal code in format XXXXX-XXX",
-    example: "12345-678",
+    example: "71995-065",
   })
   @IsString()
   @IsNotEmpty()

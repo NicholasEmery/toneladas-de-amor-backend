@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Param } from "@nestjs/common";
 import { CheckoutService } from "./checkout.service";
 import { AuthGuard } from "../auth/auth.guard";
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiBody } from "@nestjs/swagger";
 import { CreateCheckoutDetachedDto } from "./dto/createCheckoutDetached.dto";
 import { CreateCheckoutRecurrentDto } from "./dto/createCheckoutRecurrent.dto";
 import { CancelCheckoutByIdDto } from "./dto/cancelCheckoutById.dto";
