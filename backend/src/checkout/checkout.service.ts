@@ -51,10 +51,10 @@ export class CheckoutService {
     }
   }
 
-  async cancelCheckout(id: CancelCheckoutByIdDto) {
+  async cancelCheckout(id: string) {
     try {
       const response = await firstValueFrom(
-        this.asaasApiService.post(`/checkouts/${id.id}/cancel`, {}),
+        this.asaasApiService.post(`/checkouts/${id}/cancel`, {}),
       );
       return response.data;
     } catch (error: unknown) {

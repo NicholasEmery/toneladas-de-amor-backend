@@ -52,17 +52,9 @@ export class CheckoutController {
   @UseGuards(AuthGuard)
   @Post("cancel/payment/:id")
   @ApiOperation({ summary: "Cancela um checkout de pagamento" })
-  @ApiBody({
-    description: "ID do checkout a ser cancelado",
-    type: CancelCheckoutByIdDto,
-    examples: {
-      default: {
-        summary: "Exemplo de cancelamento de checkout",
-        value: { id: "12345" },
-      },
-    },
-  })
-  async cancelCheckout(@Param("id") id: CancelCheckoutByIdDto) {
+  async cancelCheckout(@Param() cancelCheckoutByIdDto: CancelCheckoutByIdDto) {
+    const { id } = cancelCheckoutByIdDto;
+
     return this.checkoutService.cancelCheckout(id);
   }
 }
