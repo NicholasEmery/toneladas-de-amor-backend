@@ -3,7 +3,6 @@ import { firstValueFrom } from "rxjs";
 import { CreateCheckoutRecurrentDto } from "./dto/createCheckoutRecurrent.dto";
 import { AsaasApiService } from "../common/asaas-api.service";
 import { CreateCheckoutDetachedDto } from "./dto/createCheckoutDetached.dto";
-import { CancelCheckoutByIdDto } from "./dto/cancelCheckoutById.dto";
 
 @Injectable()
 export class CheckoutService {
