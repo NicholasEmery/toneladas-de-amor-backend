@@ -27,7 +27,7 @@ export class DeleteUserController {
     },
   })
   @ApiBearerAuth()
-  @Delete("by-id/:id")
+  @Delete("by-id/:userId")
   @HttpCode(200)
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard, AuthGuard)

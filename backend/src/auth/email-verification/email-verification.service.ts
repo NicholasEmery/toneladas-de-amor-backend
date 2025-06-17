@@ -1,9 +1,13 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service";
+import { MailServiceVerifiedEmail } from "../../mail/mail-otp/mail-verified-email.service";
 
 @Injectable()
 export class EmailVerificationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailServiceVerifiedEmail: MailServiceVerifiedEmail,
+  ) {}
 
   async sendOtp(email: string) {
     const user = await this.prisma.user.findUnique({
@@ -28,7 +32,7 @@ export class EmailVerificationService {
       },
     });
 
-    // Envia o email com o OTP
+    await this.mailServiceVerifiedEmail.sendMail(email, otp); // Envia o email com o OTP
   }
 
   async verifyOtp(
