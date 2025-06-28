@@ -41,15 +41,20 @@ export class CreateUserService {
       },
     });
 
-    const payload = {
+    const payloadAccess: { sub: string; version: number; type: string } = {
       sub: user.id,
       version: user.tokenVersion,
+      type: "access",
     };
-
-    const access_token = await this.jwtService.signAsync(payload, {
+    const payloadRefresh: { sub: string; version: number; type: string } = {
+      sub: user.id,
+      version: user.tokenVersion,
+      type: "refresh",
+    };
+    const access_token = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token = await this.jwtService.signAsync(payload, {
+    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
@@ -86,18 +91,22 @@ export class CreateUserService {
       },
     });
 
-    const payload = {
+    const payloadAccess: { sub: string; version: number; type: string } = {
       sub: user.id,
       version: user.tokenVersion,
+      type: "access",
     };
-
-    const access_token = await this.jwtService.signAsync(payload, {
+    const payloadRefresh: { sub: string; version: number; type: string } = {
+      sub: user.id,
+      version: user.tokenVersion,
+      type: "refresh",
+    };
+    const access_token = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token = await this.jwtService.signAsync(payload, {
+    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
-
     return {
       accessToken: access_token,
       refreshToken: refresh_token,
@@ -148,15 +157,20 @@ export class CreateUserService {
         },
       });
 
-      const payload: { sub: string; version: number } = {
+      const payloadAccess: { sub: string; version: number; type: string } = {
         sub: user.id,
         version: user.tokenVersion,
+        type: "access",
       };
-
-      const access_token: string = await this.jwtService.signAsync(payload, {
+      const payloadRefresh: { sub: string; version: number; type: string } = {
+        sub: user.id,
+        version: user.tokenVersion,
+        type: "refresh",
+      };
+      const access_token = await this.jwtService.signAsync(payloadAccess, {
         expiresIn: "15m", // Tempo de expiração do access token
       });
-      const refresh_token: string = await this.jwtService.signAsync(payload, {
+      const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
         expiresIn: "7d", // Tempo de expiração do refresh token
       });
 
@@ -195,18 +209,22 @@ export class CreateUserService {
       },
     });
 
-    const payload: { sub: string; version: number } = {
+    const payloadAccess: { sub: string; version: number; type: string } = {
       sub: user.id,
       version: user.tokenVersion,
+      type: "access",
     };
-
-    const access_token: string = await this.jwtService.signAsync(payload, {
+    const payloadRefresh: { sub: string; version: number; type: string } = {
+      sub: user.id,
+      version: user.tokenVersion,
+      type: "refresh",
+    };
+    const access_token = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token: string = await this.jwtService.signAsync(payload, {
+    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
-
     return {
       accessToken: access_token,
       refreshToken: refresh_token,

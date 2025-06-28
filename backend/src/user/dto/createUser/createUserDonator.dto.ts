@@ -61,7 +61,8 @@ export class CreateUserDonatorDto {
   @ApiProperty({
     default: {
       nameBusiness: "Exemplo LTDA",
-      cnpj: "12.345.678/0001-99",
+      typePerson: "PESSOAJURIDICA",
+      cpfOrCnpj: "12345678000199",
       address: {
         street: "Rua Exemplo",
         number: "123",

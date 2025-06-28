@@ -18,7 +18,7 @@ export class EmailResetPasswordService {
     if (!user) throw new NotFoundException("Usuário não encontrado");
 
     const resetPasswordToken = await this.jwtService.signAsync(
-      { sub: user.id },
+      { sub: user.id, type: "reset-password" },
       { expiresIn: "15m" }, // Token de reset de senha com expiração de 15 minutos
     );
 
