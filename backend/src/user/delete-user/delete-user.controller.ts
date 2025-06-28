@@ -27,9 +27,7 @@ export class DeleteUserController {
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   async deleteUser(@Param() deleteUserByIdDto: DeleteUserByIdDto): Promise<{ success: string; statusCode: number }> {
-    const { userId } = deleteUserByIdDto;
-
-    await this.deleteUserService.deleteUser(userId);
+    await this.deleteUserService.deleteUser(deleteUserByIdDto);
 
     return {
       success: "Usuário deletado com sucesso.",
