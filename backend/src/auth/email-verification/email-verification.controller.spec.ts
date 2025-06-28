@@ -9,15 +9,10 @@ describe("EmailVerificationController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EmailVerificationController],
-      providers: [
-        EmailVerificationService,
-        { provide: PrismaService, useValue: {} },
-      ],
+      providers: [EmailVerificationService, { provide: PrismaService, useValue: {} }],
     }).compile();
 
-    controller = module.get<EmailVerificationController>(
-      EmailVerificationController,
-    );
+    controller = module.get<EmailVerificationController>(EmailVerificationController);
   });
 
   it("should be defined", () => {

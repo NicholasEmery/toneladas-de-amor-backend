@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsAlpha,
-  IsEmail,
-  IsNotEmpty,
-  Length,
-  Matches,
-} from "class-validator";
+import { IsString, IsAlpha, IsEmail, IsNotEmpty, Length, Matches } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "@prisma/client";
 
@@ -33,8 +26,7 @@ export class CreateUserAdminDto {
   })
   @Length(6)
   @Matches(/^[a-zA-Z0-9@!\/$#%&*]*$/, {
-    message:
-      "Password can only contain letters, numbers, and special characters @, !, \, /, $, #, %, &, *",
+    message: "Password can only contain letters, numbers, and special characters @, !, \, /, $, #, %, &, *",
   })
   @IsString()
   @IsNotEmpty()

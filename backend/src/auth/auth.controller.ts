@@ -1,13 +1,7 @@
 import { Body, Controller, HttpCode, Post, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -54,8 +48,7 @@ export class AuthController {
     refresh_token: string;
     statusCode: number;
   }> {
-    const { access_token, refresh_token, role, name } =
-      await this.authService.signin(data);
+    const { access_token, refresh_token, role, name } = await this.authService.signin(data);
 
     return {
       message: "Usuário autenticado com sucesso.",
@@ -83,11 +76,15 @@ export class AuthController {
     },
   })
   @ApiBearerAuth()
-  async refreshToken(@Headers("authorization") authHeader: string) {
-    const refresh_token = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
+  async refreshToken(@Headers("authorization") authHeader: string): Promise<{
+    message: string;
+    access_token: string;
+    refresh_token: string;
+    statusCode: number;
+  }> {
+    const refresh_token: string = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
-    const { accessToken, refreshToken } =
-      await this.authService.refreshToken(refresh_token);
+    const { accessToken, refreshToken } = await this.authService.refreshToken(refresh_token);
 
     return {
       message: "Token atualizado com sucesso.",
@@ -117,7 +114,7 @@ export class AuthController {
     message: string;
     statusCode: number;
   }> {
-    const accessToken = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
+    const accessToken: string = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
     await this.authService.logout(accessToken); // Chama o serviço de logout
 

@@ -36,8 +36,7 @@ export class CreateUserUpheldDto {
     description: "Senha do usuário",
   })
   @Matches(/^[a-zA-Z0-9@!\/$#%&*]*$/, {
-    message:
-      "Password can only contain letters, numbers, and special characters @, !, \, /, $, #, %, &, *",
+    message: "Password can only contain letters, numbers, and special characters @, !, \, /, $, #, %, &, *",
   })
   @Length(6)
   @IsString()

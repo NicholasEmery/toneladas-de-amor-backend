@@ -1,12 +1,4 @@
-import {
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  Min,
-  ValidateNested,
-} from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, Min, ValidateNested } from "class-validator";
 import { FieldsCustomerDataDto } from "./fieldsCustomerData/fieldsCustomerData.dto";
 import { FieldsItemsDto } from "./fieldsItems/fieldsItems.dto";
 import { FieldsSubscriptionDto } from "./fieldsSubscription/fieldsSubscription.dto";

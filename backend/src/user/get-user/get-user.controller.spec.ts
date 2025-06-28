@@ -73,9 +73,7 @@ describe("GetUserController", () => {
   it("deve buscar usuário por ID do token", async () => {
     const req = { user: { id: "user-id" } } as { user: { id: string } };
 
-    const result = (await controller.getUserByIdToken(
-      req,
-    )) as GetUserByIdTokenReturn;
+    const result = (await controller.getUserByIdToken(req)) as GetUserByIdTokenReturn;
     expect(result.success).toBe("Usuário encontrado com sucesso.");
     expect(result.user).toEqual(mockUser);
     expect(result.statusCode).toBe(200);
@@ -119,9 +117,7 @@ describe("GetUserController", () => {
 
   it("deve buscar usuários por role", async () => {
     const dto = { role: Role.DONATOR };
-    const result = (await controller.getUserByRole(
-      dto,
-    )) as GetUsersByRoleReturn;
+    const result = (await controller.getUserByRole(dto)) as GetUsersByRoleReturn;
     expect(result.success).toContain("Usuários com role:");
     expect(result.users).toEqual([mockUser]);
     expect(result.statusCode).toBe(200);

@@ -22,63 +22,39 @@ enum Role {
 
 enum Status {
   PENDING
-  APPROVED
-  REJECTED
+  COMFIRMED
+  CANCELED
 }
 
 enum MethodPayment {
-  PIX
-  BOLETO
   CREDIT_CARD
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  email         String         @unique
+  email         String    @unique
   password      String
-  phone         String         @unique
+  phone         String    @unique
   role          Role
   fieldsRole    Json?
-  Donation      Donation[]
-  Notification  Notification[]
-  emailVerified Boolean        @default(false)
+  donation      Donation?
+  emailVerified Boolean   @default(false)
   otp           String?
   expiresOtpAt  DateTime?
-  tokenVersion  Int            @default(0)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  tokenVersion  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Donation {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String        @db.ObjectId
-  user             User          @relation(fields: [userId], references: [id])
-  amount           Float
-  status           Status        @default(PENDING)
-  methodPayment    MethodPayment
-  recurringPayment Boolean       @default(false)
-  createdAt        DateTime      @default(now())
-}
-
-model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  image       String?
-  name        String
-  description String?
-  stockQuant  Int
-  category    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Notification {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  user        User     @relation(fields: [userId], references: [id])
-  title       String
-  description String
-  read        Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String        @unique @db.ObjectId
+  user          User          @relation(fields: [userId], references: [id])
+  amount        Float
+  status        Status        @default(PENDING)
+  methodPayment MethodPayment @default(CREDIT_CARD)
+  isRecurring   Json
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }

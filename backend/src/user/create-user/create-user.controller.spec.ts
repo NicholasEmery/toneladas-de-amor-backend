@@ -22,9 +22,7 @@ describe("CreateUserController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CreateUserController],
-      providers: [
-        { provide: CreateUserService, useValue: mockCreateUserService },
-      ],
+      providers: [{ provide: CreateUserService, useValue: mockCreateUserService }],
     }).compile();
 
     controller = module.get<CreateUserController>(CreateUserController);
@@ -112,10 +110,7 @@ describe("CreateUserController", () => {
       },
     };
     const token = "token";
-    const result = await controller.createUserColaborator(
-      dto,
-      `Bearer ${token}`,
-    );
+    const result = await controller.createUserColaborator(dto, `Bearer ${token}`);
     expect(result.success).toBe("Usuário criado com sucesso.");
     expect(result.accessToken).toBe(mockTokens.accessToken);
     expect(result.refreshToken).toBe(mockTokens.refreshToken);

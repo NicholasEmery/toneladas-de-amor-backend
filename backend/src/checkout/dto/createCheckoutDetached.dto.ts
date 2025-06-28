@@ -1,12 +1,4 @@
-import {
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  Min,
-  ValidateNested,
-} from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, Min, ValidateNested } from "class-validator";
 import { FieldsCustomerDataDto } from "./fieldsCustomerData/fieldsCustomerData.dto";
 import { FieldsItemsDto } from "./fieldsItems/fieldsItems.dto";
 import { Type } from "class-transformer";
@@ -70,8 +62,7 @@ export class CreateCheckoutDetachedDto {
   callback!: FieldsCallBackDto;
 
   @ApiProperty({
-    description:
-      "Itens do checkout, incluindo detalhes como ID, nome, quantidade e valor.",
+    description: "Itens do checkout, incluindo detalhes como ID, nome, quantidade e valor.",
     isArray: true,
     type: FieldsItemsDto,
   })

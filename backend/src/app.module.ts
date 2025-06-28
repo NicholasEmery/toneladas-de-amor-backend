@@ -4,21 +4,23 @@ import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from "./database/database.module";
 import { EmailVerificationModule } from "./auth/email-verification/email-verification.module";
 import { MailModuleVerifiedEmail } from "./mail/mail-otp/mail-verified-email.module";
-import { MailResetPasswordService } from "./mail/mail-reset-password/mail-reset-password.service";
-import { MailResetPasswordModule } from "./mail/mail-reset-password/mail-reset-password.module";
 import { CreateUserModule } from "./user/create-user/create-user.module";
 import { JwtModule } from "@nestjs/jwt";
 import { GetUserModule } from "./user/get-user/get-user.module";
 import { DeleteUserModule } from "./user/delete-user/delete-user.module";
 import { UpdateUserModule } from "./user/update-user/update-user.module";
 import { CheckoutModule } from "./checkout/checkout.module";
-import { HistoryPaymentController } from "./history-payment/history-payment.controller";
-import { HistoryPaymentModule } from "./history-payment/history-payment.module";
+import { CreateDonationModule } from "./donation/create-donation/create-donation.module";
+import { UpdateDonationModule } from "./donation/update-donation/update-donation.module";
+import { GetDonationModule } from "./donation/get-donation/get-donation.module";
+import { ScheduleModule } from "@nestjs/schedule";
+import { DonationCleanupCronService } from "./donation/donation-cleanup-cron/donation-cleanup-cron.service";
 
 @Module({
   imports: [
     AuthModule,
     DatabaseModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({
       global: true,
@@ -30,11 +32,11 @@ import { HistoryPaymentModule } from "./history-payment/history-payment.module";
     UpdateUserModule,
     EmailVerificationModule,
     MailModuleVerifiedEmail,
-    MailResetPasswordModule,
     CheckoutModule,
-    HistoryPaymentModule,
+    CreateDonationModule,
+    UpdateDonationModule,
+    GetDonationModule,
   ],
-  providers: [MailResetPasswordService],
-  controllers: [HistoryPaymentController],
+  providers: [DonationCleanupCronService],
 })
 export class AppModule {}

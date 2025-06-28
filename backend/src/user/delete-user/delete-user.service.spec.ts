@@ -14,10 +14,7 @@ describe("DeleteUserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        DeleteUserService,
-        { provide: PrismaService, useValue: mockPrisma },
-      ],
+      providers: [DeleteUserService, { provide: PrismaService, useValue: mockPrisma }],
     }).compile();
 
     service = module.get<DeleteUserService>(DeleteUserService);
@@ -36,16 +33,12 @@ describe("DeleteUserService", () => {
     const notFoundError = new Error("User not found");
     notFoundError.name = "NotFoundError";
     mockPrisma.user.delete.mockRejectedValueOnce(notFoundError);
-    await expect(service.deleteUser("user-id")).rejects.toThrow(
-      NotFoundException,
-    );
+    await expect(service.deleteUser("user-id")).rejects.toThrow(NotFoundException);
   });
 
   it("deve lançar BadRequestException para outros erros", async () => {
     const genericError = new Error("Erro genérico");
     mockPrisma.user.delete.mockRejectedValueOnce(genericError);
-    await expect(service.deleteUser("user-id")).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(service.deleteUser("user-id")).rejects.toThrow(BadRequestException);
   });
 });

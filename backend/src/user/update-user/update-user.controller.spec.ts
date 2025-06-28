@@ -19,11 +19,7 @@ describe("UpdateUserController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UpdateUserController],
-      providers: [
-        UpdateUserService,
-        { provide: JwtService, useValue: {} },
-        { provide: PrismaService, useValue: {} },
-      ],
+      providers: [UpdateUserService, { provide: JwtService, useValue: {} }, { provide: PrismaService, useValue: {} }],
     })
       .overrideGuard(AuthGuard)
       .useClass(MockAuthGuard)

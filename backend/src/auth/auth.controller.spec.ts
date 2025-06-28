@@ -7,7 +7,11 @@ describe("AuthController", () => {
   let controller: AuthController;
   let service: AuthService;
 
-  const mockAuthService = {
+  const mockAuthService: {
+    signin: jest.Mock;
+    refreshToken: jest.Mock;
+    logout: jest.Mock;
+  } = {
     signin: jest.fn().mockResolvedValue({
       message: "Usuário autenticado com sucesso.",
       role: "DONATOR",
@@ -38,23 +42,35 @@ describe("AuthController", () => {
 
   it("deve autenticar usuário com sucesso", async () => {
     const dto: SignInDto = { email: "test@example.com", password: "123456" };
-    const result = await controller.signin(dto);
+    const result: {
+      message: string;
+      role: string;
+      name: string;
+      access_token: string;
+      refresh_token: string;
+      statusCode: number;
+    } = await controller.signin(dto);
     expect(result.message).toBe("Usuário autenticado com sucesso.");
     expect(result.statusCode).toBe(200);
     expect(service.signin).toHaveBeenCalledWith(dto);
   });
 
   it("deve atualizar o token com sucesso", async () => {
-    const authHeader = "Bearer refresh-token";
-    const result = await controller.refreshToken(authHeader);
+    const authHeader: string = "Bearer refresh-token";
+    const result: {
+      message: string;
+      access_token: string;
+      refresh_token: string;
+      statusCode: number;
+    } = await controller.refreshToken(authHeader);
     expect(result.message).toBe("Token atualizado com sucesso.");
     expect(result.statusCode).toBe(200);
     expect(service.refreshToken).toHaveBeenCalledWith("refresh-token");
   });
 
   it("deve fazer logout com sucesso", async () => {
-    const authHeader = "Bearer access-token";
-    const result = await controller.logout(authHeader);
+    const authHeader: string = "Bearer access-token";
+    const result: { message: string; statusCode: number } = await controller.logout(authHeader);
     expect(result.message).toBe("Usuário deslogado com sucesso.");
     expect(result.statusCode).toBe(200);
     expect(service.logout).toHaveBeenCalledWith("access-token");

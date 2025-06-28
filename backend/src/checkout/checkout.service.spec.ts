@@ -42,9 +42,7 @@ describe("CheckoutService", () => {
     it("should return error object on failure", async () => {
       const dto = {} as CreateCheckoutDetachedDto;
       const mockError = { response: { data: { error: "fail" } } };
-      (asaasApiService.post as jest.Mock).mockReturnValueOnce(
-        throwError(() => mockError),
-      );
+      (asaasApiService.post as jest.Mock).mockReturnValueOnce(throwError(() => mockError));
       const result = (await service.createDetachedCheckout(dto)) as {
         success: boolean;
         message: string;
@@ -68,9 +66,7 @@ describe("CheckoutService", () => {
     it("should return error object on failure", async () => {
       const dto = {} as CreateCheckoutRecurrentDto;
       const mockError = { response: { data: { error: "fail" } } };
-      (asaasApiService.post as jest.Mock).mockReturnValueOnce(
-        throwError(() => mockError),
-      );
+      (asaasApiService.post as jest.Mock).mockReturnValueOnce(throwError(() => mockError));
       const result = (await service.createRecurrentCheckout(dto)) as {
         success: boolean;
         message: string;

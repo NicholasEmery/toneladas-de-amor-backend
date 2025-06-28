@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service";
 import { UpdateUserUpheldDto } from "../dto/updateUser/updateUserUpheld.dto";
 import { User } from "@prisma/client";
@@ -16,19 +12,14 @@ import { UpdateUserAdminDto } from "../dto/updateUser/updateUserAdmin.dto";
 export class UpdateUserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async updateUserUpheld(
-    userId: string,
-    updateUserUpheldDto: UpdateUserUpheldDto,
-  ): Promise<User> {
+  async updateUserUpheld(userId: string, updateUserUpheldDto: UpdateUserUpheldDto): Promise<User> {
     try {
       const { fieldsRole } = updateUserUpheldDto;
 
       const user = await this.prisma.user.update({
         where: { id: userId },
         data: {
-          fieldsRole: JSON.parse(
-            JSON.stringify(fieldsRole),
-          ) as Prisma.InputJsonValue,
+          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)) as Prisma.InputJsonValue,
         },
       });
 
@@ -45,10 +36,7 @@ export class UpdateUserService {
     }
   }
 
-  async updateUserDonator(
-    userId: string,
-    updateUserDonatorDto: UpdateUserDonatorDto,
-  ): Promise<User> {
+  async updateUserDonator(userId: string, updateUserDonatorDto: UpdateUserDonatorDto): Promise<User> {
     try {
       const { fieldsRole, ...updateData } = updateUserDonatorDto;
 
@@ -73,10 +61,7 @@ export class UpdateUserService {
     }
   }
 
-  async updateUserColaborator(
-    userId: string,
-    updateUserColaboratorDto: UpdateUserColaboratorDto,
-  ): Promise<User> {
+  async updateUserColaborator(userId: string, updateUserColaboratorDto: UpdateUserColaboratorDto): Promise<User> {
     try {
       const { fieldsRole, ...updateData } = updateUserColaboratorDto;
 
@@ -101,10 +86,7 @@ export class UpdateUserService {
     }
   }
 
-  async updateUserAdmin(
-    userId: string,
-    updateUserAdminDto: UpdateUserAdminDto,
-  ): Promise<User> {
+  async updateUserAdmin(userId: string, updateUserAdminDto: UpdateUserAdminDto): Promise<User> {
     try {
       const { ...updateData } = updateUserAdminDto;
 

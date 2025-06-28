@@ -21,8 +21,6 @@ function removePasswordField(data: unknown): unknown {
 
 export class RemovePasswordInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    return next
-      .handle()
-      .pipe(map((data: unknown) => removePasswordField(data)));
+    return next.handle().pipe(map((data: unknown) => removePasswordField(data)));
   }
 }

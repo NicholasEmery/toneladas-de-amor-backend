@@ -4,11 +4,7 @@ import { PrismaService } from "../database/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 jest.mock("bcrypt");
-import {
-  UnauthorizedException,
-  NotFoundException,
-  BadRequestException,
-} from "@nestjs/common";
+import { UnauthorizedException, NotFoundException, BadRequestException } from "@nestjs/common";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -73,17 +69,15 @@ describe("AuthService", () => {
   it("deve lançar NotFoundException se usuário não existir", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(null);
     (bcrypt.compare as jest.Mock).mockResolvedValue(false);
-    await expect(
-      service.signin({ email: "notfound@example.com", password: "123456" }),
-    ).rejects.toThrow(NotFoundException);
+    await expect(service.signin({ email: "notfound@example.com", password: "123456" })).rejects.toThrow(
+      NotFoundException,
+    );
   });
 
   it("deve lançar UnauthorizedException se senha for inválida", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(mockUser);
     (bcrypt.compare as jest.Mock).mockResolvedValue(false);
-    await expect(
-      service.signin({ email: mockUser.email, password: "wrong" }),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(service.signin({ email: mockUser.email, password: "wrong" })).rejects.toThrow(UnauthorizedException);
   });
 
   it("deve lançar UnauthorizedException se email não verificado", async () => {
@@ -92,9 +86,7 @@ describe("AuthService", () => {
       emailVerified: false,
     });
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-    await expect(
-      service.signin({ email: mockUser.email, password: "123456" }),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(service.signin({ email: mockUser.email, password: "123456" })).rejects.toThrow(UnauthorizedException);
   });
 
   it("deve atualizar token com sucesso", async () => {
@@ -111,18 +103,14 @@ describe("AuthService", () => {
 
   it("deve lançar UnauthorizedException ao atualizar token se usuário não existir", async () => {
     mockPrisma.user.findUnique.mockResolvedValueOnce(null);
-    await expect(service.refreshToken("refresh-token")).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.refreshToken("refresh-token")).rejects.toThrow(UnauthorizedException);
   });
 
   it("deve lançar BadRequestException ao atualizar token se erro genérico", async () => {
     mockJwtService.verify.mockImplementationOnce(() => {
       throw new Error("fail");
     });
-    await expect(service.refreshToken("refresh-token")).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(service.refreshToken("refresh-token")).rejects.toThrow(BadRequestException);
   });
 
   it("deve fazer logout com sucesso", async () => {
@@ -139,8 +127,6 @@ describe("AuthService", () => {
     mockJwtService.verify.mockImplementationOnce(() => {
       throw new Error("fail");
     });
-    await expect(service.logout("access-token")).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.logout("access-token")).rejects.toThrow(UnauthorizedException);
   });
 });

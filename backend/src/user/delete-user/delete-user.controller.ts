@@ -5,11 +5,7 @@ import { RolesGuard } from "../../auth/roles.guard";
 import { AuthGuard } from "../../auth/auth.guard";
 import { Roles } from "../../auth/roles.decorator";
 import { Role } from "@prisma/client";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiUnauthorizedResponse,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @Controller("delete-user")
 export class DeleteUserController {
@@ -31,9 +27,7 @@ export class DeleteUserController {
   @HttpCode(200)
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard, AuthGuard)
-  async deleteUser(
-    @Param() deleteUserByIdDto: DeleteUserByIdDto,
-  ): Promise<{ success: string; statusCode: number }> {
+  async deleteUser(@Param() deleteUserByIdDto: DeleteUserByIdDto): Promise<{ success: string; statusCode: number }> {
     const { userId } = deleteUserByIdDto;
 
     await this.deleteUserService.deleteUser(userId);

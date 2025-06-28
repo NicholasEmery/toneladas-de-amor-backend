@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Patch,
-  HttpCode,
-  UseGuards,
-  Body,
-  Request,
-} from "@nestjs/common";
+import { Controller, Patch, HttpCode, UseGuards, Body, Request } from "@nestjs/common";
 import { UpdateUserService } from "./update-user.service";
 import { UpdateUserUpheldDto } from "../dto/updateUser/updateUserUpheld.dto";
 import { AuthGuard } from "../../auth/auth.guard";
@@ -13,11 +6,7 @@ import { UpdateUserDonatorDto } from "../dto/updateUser/updateUserDonator.dto";
 import { UpdateUserColaboratorDto } from "../dto/updateUser/updateUserColaborator.dto";
 import { UpdateUserAdminDto } from "../dto/updateUser/updateUserAdmin.dto";
 import { User } from "@prisma/client";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiUnauthorizedResponse,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @Controller("update-user")
 export class UpdateUserController {
@@ -42,11 +31,8 @@ export class UpdateUserController {
     @Request() req: Request & { user: { id: string } },
     @Body() updateUserUpheldDto: UpdateUserUpheldDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
-    const userId = req.user.id;
-    const user = await this.updateUserService.updateUserUpheld(
-      userId,
-      updateUserUpheldDto,
-    );
+    const userId: string = req.user.id;
+    const user = await this.updateUserService.updateUserUpheld(userId, updateUserUpheldDto);
 
     return {
       success: "Usuário atualizado com sucesso.",
@@ -75,10 +61,7 @@ export class UpdateUserController {
     @Body() updateUserDonatorDto: UpdateUserDonatorDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
-    const user = await this.updateUserService.updateUserDonator(
-      userId,
-      updateUserDonatorDto,
-    );
+    const user = await this.updateUserService.updateUserDonator(userId, updateUserDonatorDto);
     return {
       success: "Usuário atualizado com sucesso.",
       user,
@@ -106,10 +89,7 @@ export class UpdateUserController {
     @Body() updateUserColaboratorDto: UpdateUserColaboratorDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
-    const user = await this.updateUserService.updateUserColaborator(
-      userId,
-      updateUserColaboratorDto,
-    );
+    const user = await this.updateUserService.updateUserColaborator(userId, updateUserColaboratorDto);
     return {
       success: "Usuário atualizado com sucesso.",
       user,
@@ -137,10 +117,7 @@ export class UpdateUserController {
     @Body() updateUserAdminDto: UpdateUserAdminDto,
   ): Promise<{ success: string; statusCode: number; user: User }> {
     const userId = req.user.id;
-    const user = await this.updateUserService.updateUserAdmin(
-      userId,
-      updateUserAdminDto,
-    );
+    const user = await this.updateUserService.updateUserAdmin(userId, updateUserAdminDto);
     return {
       success: "Usuário atualizado com sucesso.",
       user,

@@ -7,10 +7,7 @@ describe("EmailVerificationService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        EmailVerificationService,
-        { provide: PrismaService, useValue: {} },
-      ],
+      providers: [EmailVerificationService, { provide: PrismaService, useValue: {} }],
     }).compile();
 
     service = module.get<EmailVerificationService>(EmailVerificationService);

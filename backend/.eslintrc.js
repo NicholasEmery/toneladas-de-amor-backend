@@ -23,7 +23,16 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off", // Deixe o TS inferir
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-inferrable-types": "off",
-
+    "@typescript-eslint/typedef": [
+      "error",
+      {
+        variableDeclaration: false,
+        variableDeclarationIgnoreFunction: true,
+        memberVariableDeclaration: true,
+        parameter: true,
+        propertyDeclaration: true,
+      },
+    ],
     // Padronização de código
     "prettier/prettier": [
       "error",
@@ -37,6 +46,8 @@ module.exports = {
         bracketSpacing: true,
         arrowParens: "always",
         quoteProps: "consistent",
+        bracketSameLine: true,
+        printWidth: 120,
       },
     ],
 

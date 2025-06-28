@@ -10,9 +10,7 @@ export class CheckoutService {
 
   async createDetachedCheckout(data: CreateCheckoutDetachedDto) {
     try {
-      const response = await firstValueFrom(
-        this.asaasApiService.post("/checkouts", data),
-      );
+      const response = await firstValueFrom(this.asaasApiService.post("/checkouts", data));
       return response.data;
     } catch (error: unknown) {
       const errorMsg = "Erro ao criar checkout do tipo DETACHED";
@@ -31,9 +29,7 @@ export class CheckoutService {
 
   async createRecurrentCheckout(data: CreateCheckoutRecurrentDto) {
     try {
-      const response = await firstValueFrom(
-        this.asaasApiService.post("/checkouts", data),
-      );
+      const response = await firstValueFrom(this.asaasApiService.post("/checkouts", data));
       return response.data;
     } catch (error: unknown) {
       const errorMsg = "Erro ao criar checkout do tipo RECURRENT";
@@ -52,9 +48,7 @@ export class CheckoutService {
 
   async cancelCheckout(id: string) {
     try {
-      const response = await firstValueFrom(
-        this.asaasApiService.post(`/checkouts/${id}/cancel`, {}),
-      );
+      const response = await firstValueFrom(this.asaasApiService.post(`/checkouts/${id}/cancel`, {}));
       return response.data;
     } catch (error: unknown) {
       const errorMsg = "Erro ao cancelar checkout";

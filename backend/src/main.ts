@@ -1,17 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { Logger } from "@nestjs/common";
-import {
-  SwaggerModule,
-  DocumentBuilder,
-  SwaggerCustomOptions,
-} from "@nestjs/swagger";
+import { Logger, ValidationPipe } from "@nestjs/common";
+import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from "@nestjs/swagger";
 import { version } from "../package.json";
 import { RemovePasswordInterceptor } from "./common/interceptors/remove-field-req.interceptor";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalInterceptors(new RemovePasswordInterceptor());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const isProduction = process.env.NODE_ENV === "production";
   app.enableCors({
     origin: isProduction ? process.env.URL_FRONTEND : true,

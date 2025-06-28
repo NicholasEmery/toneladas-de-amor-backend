@@ -1,11 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  IsString,
-  ValidateNested,
-} from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber, IsObject, IsString, ValidateNested } from "class-validator";
 import { CreateAddressDto } from "./createAddressUser/createAddress.dto";
 import { Type } from "class-transformer";
 

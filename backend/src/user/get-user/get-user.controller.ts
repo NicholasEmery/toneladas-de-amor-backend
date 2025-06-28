@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  UseGuards,
-  Param,
-  Request,
-} from "@nestjs/common";
+import { Controller, Get, HttpCode, UseGuards, Param, Request } from "@nestjs/common";
 import { Role, User } from "@prisma/client";
 import { AuthGuard } from "../../auth/auth.guard";
 import { GetUserService } from "./get-user.service";
@@ -14,11 +7,7 @@ import { GetUserByEmailDto } from "../dto/getUser/getUserByEmail.dto";
 import { GetUserByPhoneDto } from "../dto/getUser/getUserByPhone.dto";
 import { GetUserByNameDto } from "../dto/getUser/getUserByName.dto";
 import { GetUsersByRoleDto } from "../dto/getUser/getUsersByRole.dto";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiUnauthorizedResponse,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { RolesGuard } from "../../auth/roles.guard";
 import { Roles } from "../../auth/roles.decorator";
 

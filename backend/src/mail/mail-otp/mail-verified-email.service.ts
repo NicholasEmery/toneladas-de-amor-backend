@@ -12,9 +12,7 @@ export class MailServiceVerifiedEmail {
     const pass = process.env.EMAIL_PASSWORD;
 
     if (!host || !port || !user || !pass) {
-      throw new Error(
-        "Configurações de e-mail não estão definidas no ambiente.",
-      );
+      throw new Error("Configurações de e-mail não estão definidas no ambiente.");
     }
 
     this.transporter = nodemailer.createTransport({

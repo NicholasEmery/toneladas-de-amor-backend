@@ -3,7 +3,7 @@ import { HttpService } from "@nestjs/axios";
 
 @Injectable()
 export class AsaasApiService {
-  private readonly baseUrl = "https://api-sandbox.asaas.com/v3";
+  private readonly baseUrl: string = "https://api-sandbox.asaas.com/v3";
 
   constructor(private readonly httpService: HttpService) {}
 

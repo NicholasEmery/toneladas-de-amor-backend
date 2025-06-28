@@ -4,11 +4,7 @@ import { CreateUserDonatorDto } from "../dto/createUser/createUserDonator.dto";
 import { CreateUserColaboratorDto } from "../dto/createUser/createUserColaborator.dto";
 import { CreateUserAdminDto } from "../dto/createUser/createUserAdmin.dto";
 import { CreateUserService } from "./create-user.service";
-import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiOperation,
-} from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
 
 @Controller("create-user")
 export class CreateUserController {
@@ -27,16 +23,13 @@ export class CreateUserController {
   })
   @Post("upheld")
   @HttpCode(201)
-  async createUserUpheld(
-    @Body() createUserUpheldDto: CreateUserUpheldDto,
-  ): Promise<{
+  async createUserUpheld(@Body() createUserUpheldDto: CreateUserUpheldDto): Promise<{
     success: string;
     accessToken: string;
     refreshToken: string;
     statusCode: number;
   }> {
-    const user =
-      await this.createUserService.createUserUpheld(createUserUpheldDto);
+    const user = await this.createUserService.createUserUpheld(createUserUpheldDto);
     return {
       success: "Usuário criado com sucesso.",
       accessToken: user.accessToken,
@@ -58,16 +51,13 @@ export class CreateUserController {
   })
   @Post("donator")
   @HttpCode(201)
-  async createUserDonator(
-    @Body() createUserDonatorDto: CreateUserDonatorDto,
-  ): Promise<{
+  async createUserDonator(@Body() createUserDonatorDto: CreateUserDonatorDto): Promise<{
     success: string;
     accessToken: string;
     refreshToken: string;
     statusCode: number;
   }> {
-    const user =
-      await this.createUserService.createUserDonator(createUserDonatorDto);
+    const user = await this.createUserService.createUserDonator(createUserDonatorDto);
     return {
       success: "Usuário criado com sucesso.",
       accessToken: user.accessToken,
@@ -100,10 +90,7 @@ export class CreateUserController {
     statusCode: number;
   }> {
     const access_token = authHeader?.split(" ")[1];
-    const user = await this.createUserService.createUserColaborator(
-      createUserColaboratorDto,
-      access_token,
-    );
+    const user = await this.createUserService.createUserColaborator(createUserColaboratorDto, access_token);
     return {
       success: "Usuário criado com sucesso.",
       accessToken: user.accessToken,
@@ -125,16 +112,13 @@ export class CreateUserController {
   })
   @Post("admin")
   @HttpCode(201)
-  async createUserAdmin(
-    @Body() createUserAdminDto: CreateUserAdminDto,
-  ): Promise<{
+  async createUserAdmin(@Body() createUserAdminDto: CreateUserAdminDto): Promise<{
     success: string;
     accessToken: string;
     refreshToken: string;
     statusCode: number;
   }> {
-    const user =
-      await this.createUserService.createUserAdmin(createUserAdminDto);
+    const user = await this.createUserService.createUserAdmin(createUserAdminDto);
     return {
       success: "Usuário criado com sucesso.",
       accessToken: user.accessToken,

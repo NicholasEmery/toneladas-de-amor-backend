@@ -6,9 +6,7 @@ import { VerifyTokenDto } from "./dto/verifyToken.dto";
 
 @Controller("auth/reset/password")
 export class EmailResetPasswordController {
-  constructor(
-    private readonly emailResetPasswordService: EmailResetPasswordService,
-  ) {}
+  constructor(private readonly emailResetPasswordService: EmailResetPasswordService) {}
 
   @Post("send/email")
   @HttpCode(200)
@@ -16,8 +14,7 @@ export class EmailResetPasswordController {
     @Body() sendEmailDto: SendEmailDto,
     @Res() res: Response,
   ): Promise<{ success: string; statusCode: number }> {
-    const { resetPasswordToken } =
-      await this.emailResetPasswordService.sendEmail(sendEmailDto.email);
+    const { resetPasswordToken } = await this.emailResetPasswordService.sendEmail(sendEmailDto.email);
 
     res.cookie("resetPasswordToken", resetPasswordToken, {
       httpOnly: true,
@@ -34,13 +31,8 @@ export class EmailResetPasswordController {
 
   @Post("verify/token")
   @HttpCode(200)
-  async verifyToken(
-    @Body() verifyTokenDto: VerifyTokenDto,
-  ): Promise<{ success: string; statusCode: number }> {
-    await this.emailResetPasswordService.verifyToken(
-      verifyTokenDto.token,
-      verifyTokenDto.password,
-    );
+  async verifyToken(@Body() verifyTokenDto: VerifyTokenDto): Promise<{ success: string; statusCode: number }> {
+    await this.emailResetPasswordService.verifyToken(verifyTokenDto.token, verifyTokenDto.password);
 
     return {
       success: "Senha alterada com sucesso.",

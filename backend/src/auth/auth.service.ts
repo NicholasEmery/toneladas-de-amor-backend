@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "../database/prisma.service";
@@ -23,33 +18,31 @@ export class AuthService {
   }> {
     const user = await this.prisma.user.findUnique({
       where: { email: params.email },
+      select: { id: true, password: true, tokenVersion: true, emailVerified: true, role: true, name: true },
     });
     if (!user) throw new NotFoundException("User not found");
 
-    const passwordMatch = await bcrypt.compare(params.password, user.password);
+    const passwordMatch: boolean = await bcrypt.compare(params.password, user.password);
     if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
 
-    if (user.emailVerified === false)
-      throw new UnauthorizedException("Email not verified");
+    if (user.emailVerified === false) throw new UnauthorizedException("Email not verified");
 
-    const payload = {
+    const payload: { sub: string; version: number } = {
       sub: user.id,
       version: user.tokenVersion,
     };
 
-    const access_token = await this.jwtService.signAsync(payload, {
+    const access_token: string = await this.jwtService.signAsync(payload, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token = await this.jwtService.signAsync(payload, {
+    const refresh_token: string = await this.jwtService.signAsync(payload, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
     return { access_token, refresh_token, role: user.role, name: user.name };
   }
 
-  async refreshToken(
-    refresh_token: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async refreshToken(refresh_token: string): Promise<{ accessToken: string; refreshToken: string }> {
     try {
       const payload = this.jwtService.verify(refresh_token);
 
@@ -65,15 +58,15 @@ export class AuthService {
         data: { tokenVersion: { increment: 1 } },
       });
 
-      const newPayload = {
+      const newPayload: { sub: string; version: number } = {
         sub: user.id,
         version: user.tokenVersion + 1,
       };
 
-      const accessToken = await this.jwtService.signAsync(newPayload, {
+      const accessToken: string = await this.jwtService.signAsync(newPayload, {
         expiresIn: "15m",
       });
-      const refreshToken = await this.jwtService.signAsync(newPayload, {
+      const refreshToken: string = await this.jwtService.signAsync(newPayload, {
         expiresIn: "7d",
       });
 
@@ -86,7 +79,7 @@ export class AuthService {
     }
   }
 
-  async logout(accessToken: string) {
+  async logout(accessToken: string): Promise<void> {
     try {
       const payload = this.jwtService.verify(accessToken); // Verifica e decodifica o token JWT
 

@@ -1,13 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsBase64,
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-} from "class-validator";
+import { IsBase64, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from "class-validator";
 
 export class FieldsItemsDto {
   @ApiProperty({

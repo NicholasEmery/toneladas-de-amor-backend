@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { Role } from "@prisma/client";
@@ -36,9 +31,7 @@ export class RolesGuard implements CanActivate {
     const token = authHeader.split(" ")[1];
     let payload;
     try {
-      payload = this.jwtService.verify(token, {
-        secret: process.env.SECRET_KEY,
-      });
+      payload = this.jwtService.verify(token);
     } catch {
       if (error.name === "TokenExpiredError") {
         throw new UnauthorizedException("Token expired");

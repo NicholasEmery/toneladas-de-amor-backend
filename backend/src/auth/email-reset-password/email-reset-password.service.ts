@@ -19,16 +19,14 @@ export class EmailResetPasswordService {
 
     const resetPasswordToken = await this.jwtService.signAsync(
       { sub: user.id },
-      { secret: process.env.SECRET_KEY, expiresIn: "15m" }, // Token de reset de senha com expiração de 15 minutos
+      { expiresIn: "15m" }, // Token de reset de senha com expiração de 15 minutos
     );
 
     return { resetPasswordToken };
   }
 
   async verifyToken(token: string, password: string) {
-    const payload = this.jwtService.verify(token, {
-      secret: process.env.SECRET_KEY,
-    });
+    const payload = this.jwtService.verify(token);
     const userId = payload.sub;
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
