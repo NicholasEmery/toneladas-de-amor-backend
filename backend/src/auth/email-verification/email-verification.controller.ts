@@ -20,7 +20,11 @@ export class EmailVerificationController {
 
   @Post("verify/otp")
   @HttpCode(200)
-  async verifyOTP(@Body() verifyOptDto: VerifyOptDto): Promise<{ emailVerified: boolean }> {
-    return await this.emailVerificationService.verifyOtp(verifyOptDto.otp, verifyOptDto.email);
+  async verifyOTP(@Body() verifyOptDto: VerifyOptDto): Promise<{ success: string; statusCode: number }> {
+    await this.emailVerificationService.verifyOtp(verifyOptDto.otp, verifyOptDto.email);
+    return {
+      success: "OTP verificado com sucesso.",
+      statusCode: 200,
+    };
   }
 }

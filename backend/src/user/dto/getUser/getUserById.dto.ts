@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class GetUserByIdDto {
   @ApiProperty({
-    default: "id",
+    default: "ID",
     description: "ID do usuário",
   })
   @IsNotEmpty()

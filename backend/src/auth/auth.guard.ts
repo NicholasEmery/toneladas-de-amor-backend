@@ -17,30 +17,33 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Access token is missing");
     }
 
-    const token = authHeader.split(" ")[1];
+    const accessToken = authHeader.split(" ")[1];
 
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = await this.jwtService.verifyAsync(accessToken);
+
+      if (payload.type !== "access") {
+        throw new UnauthorizedException("Invalid token type, please use an access token");
+      }
 
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub, tokenVersion: payload.version },
+        select: {
+          id: true,
+        },
       });
 
       if (!user) {
-        throw new UnauthorizedException("User does not exist");
+        throw new UnauthorizedException("User does not exist or invalid access token");
       }
-
-      if (user.tokenVersion !== payload.version) {
-        throw new UnauthorizedException("Token Invalidated");
-      }
-
-      // Attach user to request for further use
-      request.user = user;
 
       return true;
     } catch (error: unknown) {
+      if (error instanceof Error && error.name === "JsonWebTokenError") {
+        throw new UnauthorizedException("Invalid access token");
+      }
       if (error instanceof Error && error.name === "TokenExpiredError") {
-        throw new UnauthorizedException("Token has expired");
+        throw new UnauthorizedException("Access token expired, please refresh your token");
       }
       throw new UnauthorizedException("Invalid token");
     }

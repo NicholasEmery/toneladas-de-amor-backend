@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+import { IsNotEmpty, IsNumberString, IsOptional, IsString, Matches } from "class-validator";
 
 export class CreateAddressDto {
   @IsString()
@@ -7,6 +7,7 @@ export class CreateAddressDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsNumberString({ no_symbols: true }, { message: "Number must be a valid number without symbols" })
   number!: string;
 
   @IsString()
@@ -27,6 +28,7 @@ export class CreateAddressDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsNumberString({ no_symbols: true }, { message: "Zip code must be a valid number without symbols" })
   @Matches(/^\d{8}$/, {
     message: "Zip code must be exactly 8 digits",
   })

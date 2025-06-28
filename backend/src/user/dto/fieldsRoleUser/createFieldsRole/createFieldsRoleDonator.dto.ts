@@ -1,4 +1,13 @@
-import { IsNotEmpty, IsObject, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumberString,
+  IsObject,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  ValidateNested,
+} from "class-validator";
 import { CreateAddressDto } from "./createAddressUser/createAddress.dto";
 import { Type } from "class-transformer";
 
@@ -16,6 +25,7 @@ export class CreateFieldsRoleDonatorDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsNumberString({ no_symbols: true }, { message: "O campo deve conter apenas números, sem símbolos" })
   @Length(11, 14, {
     message: "O campo deve conter entre 11 e 14 caracteres, aceitando tanto CPF quanto CNPJ",
   })

@@ -1,4 +1,4 @@
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString, Matches, ValidateNested } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsObject, IsString, Matches, ValidateNested } from "class-validator";
 import { MethodPayment, Status } from "@prisma/client";
 import { RecurringDonationDto } from "./recurringDonation/recurringDonation.dto";
 import { Type } from "class-transformer";
@@ -28,5 +28,6 @@ export class CreateDonationDto {
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => RecurringDonationDto)
+  @IsObject()
   isRecurring!: RecurringDonationDto;
 }

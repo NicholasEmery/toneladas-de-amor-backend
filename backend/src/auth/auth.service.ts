@@ -123,7 +123,7 @@ export class AuthService {
         throw new UnauthorizedException("Invalid access token");
       }
       if (error instanceof Error && error.name === "TokenExpiredError") {
-        throw new UnauthorizedException("Access token expired, please refresh token");
+        throw new UnauthorizedException("Access token expired, please refresh your token");
       }
       throw new BadRequestException("Error processing logout");
     }

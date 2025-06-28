@@ -35,7 +35,7 @@ export class CreateUserColaboratorDto {
   password!: string;
 
   @ApiProperty({
-    default: "83991238499",
+    default: "5583991238499",
     description: "Telefone do usuário",
   })
   @Length(13, 13, { message: "Phone must be exactly 13 digits" })

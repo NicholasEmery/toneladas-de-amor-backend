@@ -10,7 +10,10 @@ export class UpdateDonationController {
 
   @Patch("")
   @HttpCode(200)
-  async updateDonation(@Body() updateDonationDto: UpdateDonationDto) {
+  async updateDonation(@Body() updateDonationDto: UpdateDonationDto): Promise<{
+    success: string;
+    statusCode: number;
+  }> {
     await this.updateDonationService.updateonation(updateDonationDto);
     return {
       success: "Donation updated successfully.",
