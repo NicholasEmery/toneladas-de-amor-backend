@@ -1,18 +1,25 @@
-import { IsNotEmpty, IsObject, IsString, Matches, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsObject, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
 import { CreateAddressDto } from "./createAddressUser/createAddress.dto";
 import { Type } from "class-transformer";
 
 export class CreateFieldsRoleDonatorDto {
   @IsString()
-  @IsNotEmpty()
-  nameBusiness!: string;
+  @IsOptional()
+  nameBusiness?: string;
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^\d{2}\.\d{3}\.\d{003}\/\d{4}\-\d{2}$/, {
-    message: "cnpj must be in the format 00.000.000/0000-00",
+  @Matches(/^(PESSOAFISICA|PESSOAJURIDICA)$/, {
+    message: "O campo deve ser PESSOAFISICA ou PESSOAJURIDICA",
   })
-  cnpj!: string;
+  typePerson!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(11, 14, {
+    message: "O campo deve conter entre 11 e 14 caracteres, aceitando tanto CPF quanto CNPJ",
+  })
+  cpfOrCnpj!: string;
 
   @ValidateNested()
   @Type(() => CreateAddressDto)
