@@ -40,22 +40,30 @@ export class AuthController {
       statusCode: 404,
     },
   })
-  async signin(@Body() data: SignInDto): Promise<{
+  async signin(@Body() signInDto: SignInDto): Promise<{
     message: string;
-    role: string;
-    name: string;
     access_token: string;
     refresh_token: string;
+    user: {
+      name: string;
+      role: string;
+    };
     statusCode: number;
   }> {
-    const { access_token, refresh_token, role, name } = await this.authService.signin(data);
+    const {
+      access_token,
+      refresh_token,
+      user: { name, role },
+    } = await this.authService.signin(signInDto);
 
     return {
       message: "Usuário autenticado com sucesso.",
-      role: role,
-      name: name,
       access_token,
       refresh_token,
+      user: {
+        name,
+        role,
+      },
       statusCode: 200,
     };
   }
@@ -116,7 +124,7 @@ export class AuthController {
   }> {
     const accessToken: string = authHeader?.split(" ")[1]; // Extrai o token do header Authorization
 
-    await this.authService.logout(accessToken); // Chama o serviço de logout
+    await this.authService.logout(accessToken);
 
     return {
       message: "Usuário deslogado com sucesso.",

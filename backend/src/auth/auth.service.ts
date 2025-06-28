@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "../database/prisma.service";
+import { SignInDto } from "./dto/signIn.dto";
 
 @Injectable()
 export class AuthService {
@@ -10,85 +11,121 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signin(params: { email: string; password: string }): Promise<{
+  async signin(signInDto: SignInDto): Promise<{
     access_token: string;
     refresh_token: string;
-    role: string;
-    name: string;
+    user: {
+      name: string;
+      role: string;
+    };
   }> {
-    const user = await this.prisma.user.findUnique({
-      where: { email: params.email },
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: signInDto.email },
       select: { id: true, password: true, tokenVersion: true, emailVerified: true, role: true, name: true },
     });
-    if (!user) throw new NotFoundException("User not found");
 
-    const passwordMatch: boolean = await bcrypt.compare(params.password, user.password);
-    if (!passwordMatch) throw new UnauthorizedException("Invalid credentials");
+    const passwordMatch: boolean = await bcrypt.compare(signInDto.password, existingUser!.password);
 
-    if (user.emailVerified === false) throw new UnauthorizedException("Email not verified");
+    if (!existingUser || !passwordMatch) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
 
-    const payload: { sub: string; version: number } = {
-      sub: user.id,
-      version: user.tokenVersion,
+    if (existingUser.emailVerified === false) throw new UnauthorizedException("Email not verified");
+
+    const payloadAccess: { sub: string; version: number; type: string } = {
+      sub: existingUser.id,
+      version: existingUser.tokenVersion,
+      type: "access",
     };
 
-    const access_token: string = await this.jwtService.signAsync(payload, {
+    const payloadRefresh: { sub: string; version: number; type: string } = {
+      sub: existingUser.id,
+      version: existingUser.tokenVersion,
+      type: "refresh",
+    };
+
+    const access_token: string = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token: string = await this.jwtService.signAsync(payload, {
+    const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
-    return { access_token, refresh_token, role: user.role, name: user.name };
+    return { access_token, refresh_token, user: { name: existingUser.name, role: existingUser.role } };
   }
 
   async refreshToken(refresh_token: string): Promise<{ accessToken: string; refreshToken: string }> {
     try {
-      const payload = this.jwtService.verify(refresh_token);
+      const payload = await this.jwtService.verifyAsync(refresh_token); // Verifica e decodifica o token JWT
 
-      const user = await this.prisma.user.findUnique({
+      if (payload.type !== "refresh") {
+        throw new UnauthorizedException("Invalid token type, please use a valid refresh token");
+      }
+
+      await this.prisma.user.findUnique({
         where: { id: payload.sub, tokenVersion: payload.version },
       });
 
-      if (!user) throw new UnauthorizedException();
-
       // Rotaciona o token incrementando a versão
-      await this.prisma.user.update({
-        where: { id: user.id },
+      const updatedUser = await this.prisma.user.update({
+        where: { id: payload.id },
         data: { tokenVersion: { increment: 1 } },
+        select: { id: true, tokenVersion: true },
       });
 
-      const newPayload: { sub: string; version: number } = {
-        sub: user.id,
-        version: user.tokenVersion + 1,
+      const newPayloadAccess: { sub: string; version: number; type: string } = {
+        sub: updatedUser.id,
+        version: updatedUser.tokenVersion,
+        type: "access",
       };
 
-      const accessToken: string = await this.jwtService.signAsync(newPayload, {
+      const newPayloadRefresh: { sub: string; version: number; type: string } = {
+        sub: updatedUser.id,
+        version: updatedUser.tokenVersion,
+        type: "refresh",
+      };
+
+      const accessToken: string = await this.jwtService.signAsync(newPayloadAccess, {
         expiresIn: "15m",
       });
-      const refreshToken: string = await this.jwtService.signAsync(newPayload, {
+      const refreshToken: string = await this.jwtService.signAsync(newPayloadRefresh, {
         expiresIn: "7d",
       });
 
       return { accessToken, refreshToken };
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        throw error;
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "JsonWebTokenError") {
+        throw new UnauthorizedException("Invalid refresh token");
       }
-      throw new BadRequestException((error as Error).message);
+      if (error instanceof Error && error.name === "TokenExpiredError") {
+        throw new UnauthorizedException("Refresh token expired, please login again");
+      }
+      throw new BadRequestException("Error processing refresh token");
     }
   }
 
-  async logout(accessToken: string): Promise<void> {
+  async logout(accessToken: string): Promise<boolean> {
     try {
-      const payload = this.jwtService.verify(accessToken); // Verifica e decodifica o token JWT
+      const payload = await this.jwtService.verifyAsync(accessToken); // Verifica e decodifica o token JWT
+
+      if (payload.type !== "access") {
+        throw new UnauthorizedException("Invalid token type, please use a valid access token");
+      }
 
       await this.prisma.user.update({
         where: { id: payload.sub },
         data: { tokenVersion: { increment: 1 } }, // Incrementa a versão do token
       });
-    } catch (error) {
-      throw new UnauthorizedException("Invalid or expired refresh token");
+
+      return true;
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === "JsonWebTokenError") {
+        throw new UnauthorizedException("Invalid access token");
+      }
+      if (error instanceof Error && error.name === "TokenExpiredError") {
+        throw new UnauthorizedException("Access token expired, please refresh token");
+      }
+      throw new BadRequestException("Error processing logout");
     }
   }
 }
