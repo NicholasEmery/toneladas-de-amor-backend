@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, HttpCode, UseGuards } from "@nestjs/common";
+import { Controller, Post, Body, HttpCode, UseGuards } from "@nestjs/common";
 import { CreateUserUpheldDto } from "../dto/createUser/createUserUpheld.dto";
 import { CreateUserDonatorDto } from "../dto/createUser/createUserDonator.dto";
 import { CreateUserColaboratorDto } from "../dto/createUser/createUserColaborator.dto";

@@ -29,8 +29,6 @@ export class GetUserController {
   })
   @ApiBearerAuth()
   @Get("by-token")
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard, AuthGuard)
   async getUserByIdToken(@Request() req: { user: { id: string } }): Promise<{
     success: string;
     user: User;
