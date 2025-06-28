@@ -1,10 +1,13 @@
-import { Controller, Post, Body, Headers, HttpCode } from "@nestjs/common";
+import { Controller, Post, Body, Headers, HttpCode, UseGuards } from "@nestjs/common";
 import { CreateUserUpheldDto } from "../dto/createUser/createUserUpheld.dto";
 import { CreateUserDonatorDto } from "../dto/createUser/createUserDonator.dto";
 import { CreateUserColaboratorDto } from "../dto/createUser/createUserColaborator.dto";
 import { CreateUserAdminDto } from "../dto/createUser/createUserAdmin.dto";
 import { CreateUserService } from "./create-user.service";
 import { ApiBadRequestResponse, ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
+import { Roles } from "src/auth/roles.decorator";
+import { RolesGuard } from "src/auth/roles.guard";
+import { Role } from "@prisma/client";
 
 @Controller("create-user")
 export class CreateUserController {
@@ -80,17 +83,15 @@ export class CreateUserController {
   @ApiBearerAuth()
   @Post("colaborator")
   @HttpCode(201)
-  async createUserColaborator(
-    @Body() createUserColaboratorDto: CreateUserColaboratorDto,
-    @Headers("authorization") authHeader: string,
-  ): Promise<{
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  async createUserColaborator(@Body() createUserColaboratorDto: CreateUserColaboratorDto): Promise<{
     success: string;
     accessToken: string;
     refreshToken: string;
     statusCode: number;
   }> {
-    const access_token = authHeader?.split(" ")[1];
-    const user = await this.createUserService.createUserColaborator(createUserColaboratorDto, access_token);
+    const user = await this.createUserService.createUserColaborator(createUserColaboratorDto);
     return {
       success: "Usuário criado com sucesso.",
       accessToken: user.accessToken,

@@ -24,8 +24,8 @@ export class DeleteUserController {
   @ApiBearerAuth()
   @Delete("by-id/:userId")
   @HttpCode(200)
-  @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   async deleteUser(@Param() deleteUserByIdDto: DeleteUserByIdDto): Promise<{ success: string; statusCode: number }> {
     const { userId } = deleteUserByIdDto;
 

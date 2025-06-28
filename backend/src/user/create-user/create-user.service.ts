@@ -27,7 +27,7 @@ export class CreateUserService {
       throw new BadRequestException("User already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword: string = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
       data: {
@@ -77,7 +77,7 @@ export class CreateUserService {
       throw new BadRequestException("User already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword: string = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
       data: {
@@ -101,10 +101,10 @@ export class CreateUserService {
       version: user.tokenVersion,
       type: "refresh",
     };
-    const access_token = await this.jwtService.signAsync(payloadAccess, {
+    const access_token: string = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
+    const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
     return {
@@ -115,24 +115,8 @@ export class CreateUserService {
 
   async createUserColaborator(
     createUserColaboratorDto: CreateUserColaboratorDto,
-    accessToken: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     try {
-      try {
-        interface JwtPayload {
-          sub: string;
-          version: number;
-          role?: string;
-          [key: string]: unknown;
-        }
-        const decoded: JwtPayload = await this.jwtService.verifyAsync<JwtPayload>(accessToken);
-        if (decoded.role !== "ADMIN") {
-          throw new UnauthorizedException("Only ADMIN users can create collaborators");
-        }
-      } catch (error) {
-        throw new UnauthorizedException("Invalid token");
-      }
-
       const { name, email, password, phone, role, fieldsRole } = createUserColaboratorDto;
 
       const existingEmail: boolean = !!(await this.prisma.user.findUnique({
@@ -167,10 +151,10 @@ export class CreateUserService {
         version: user.tokenVersion,
         type: "refresh",
       };
-      const access_token = await this.jwtService.signAsync(payloadAccess, {
+      const access_token: string = await this.jwtService.signAsync(payloadAccess, {
         expiresIn: "15m", // Tempo de expiração do access token
       });
-      const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
+      const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
         expiresIn: "7d", // Tempo de expiração do refresh token
       });
 
@@ -219,10 +203,10 @@ export class CreateUserService {
       version: user.tokenVersion,
       type: "refresh",
     };
-    const access_token = await this.jwtService.signAsync(payloadAccess, {
+    const access_token: string = await this.jwtService.signAsync(payloadAccess, {
       expiresIn: "15m", // Tempo de expiração do access token
     });
-    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
+    const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
     return {
