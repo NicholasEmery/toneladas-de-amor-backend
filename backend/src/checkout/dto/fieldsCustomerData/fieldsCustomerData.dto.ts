@@ -1,16 +1,5 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  Length,
-  Matches,
-  ValidateNested,
-} from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length, Matches } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { CreateAddressDto } from "../../../user/dto/fieldsRoleUser/createFieldsRole/createAddressUser/createAddress.dto";
-import { Type } from "class-transformer";
 
 export class FieldsCustomerDataDto {
   @ApiProperty({
@@ -56,9 +45,7 @@ export class FieldsCustomerDataDto {
   })
   @IsString()
   @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  address!: CreateAddressDto["street"];
+  address!: string;
 
   @ApiProperty({
     description: "Address number",
@@ -69,9 +56,7 @@ export class FieldsCustomerDataDto {
   @Matches(/^\d+$/, {
     message: "Address number must be a valid number.",
   })
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  addressNumber!: CreateAddressDto["number"];
+  addressNumber!: string;
 
   @ApiPropertyOptional({
     description: "Address complement (optional)",
@@ -79,9 +64,7 @@ export class FieldsCustomerDataDto {
   })
   @IsString()
   @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  complement?: CreateAddressDto["complement"];
+  complement?: string;
 
   @ApiProperty({
     description: "Neighborhood (bairro)",
@@ -89,9 +72,7 @@ export class FieldsCustomerDataDto {
   })
   @IsString()
   @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  province!: CreateAddressDto["neighborhood"];
+  province!: string;
 
   @ApiProperty({
     description: "Postal code in format XXXXX-XXX",
@@ -102,9 +83,7 @@ export class FieldsCustomerDataDto {
   @Matches(/^\d{5}-\d{3}$/, {
     message: "Postal code must be in the format XXXXX-XXX.",
   })
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  postalCode!: CreateAddressDto["zipCode"];
+  postalCode!: string;
 
   @ApiProperty({
     description: "City IBGE code (7 digits)",
