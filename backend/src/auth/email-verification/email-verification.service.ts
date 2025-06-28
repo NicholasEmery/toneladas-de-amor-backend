@@ -70,6 +70,7 @@ export class EmailVerificationService {
       await this.prisma.user.update({
         where: { id: user.id },
         data: {
+          emailVerified: true,
           otp: null,
           expiresOtpAt: null,
         },
