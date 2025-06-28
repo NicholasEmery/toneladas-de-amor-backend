@@ -86,7 +86,7 @@ export class CreateUserService {
         password: hashedPassword,
         phone: phone,
         role: role,
-        fieldsRole: JSON.stringify({ fieldsRole }),
+        fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
         tokenVersion: 1,
       },
     });
@@ -136,7 +136,7 @@ export class CreateUserService {
           password: hashedPassword,
           phone: phone,
           role: role,
-          fieldsRole: JSON.stringify({ fieldsRole }),
+          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
           tokenVersion: 1,
         },
       });
