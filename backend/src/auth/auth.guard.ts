@@ -28,11 +28,16 @@ export class AuthGuard implements CanActivate {
 
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub, tokenVersion: payload.version },
+        select: {
+          id: true,
+        },
       });
 
       if (!user) {
         throw new UnauthorizedException("User does not exist or invalid access token");
       }
+
+      request.user = user;
 
       return true;
     } catch (error: unknown) {
