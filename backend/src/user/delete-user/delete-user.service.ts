@@ -16,10 +16,13 @@ export class DeleteUserService {
 
       return true;
     } catch (error: unknown) {
-      if (error instanceof Error && error.name === "NotFoundError") {
+      if (
+        error instanceof Error &&
+        (error.name === "NotFoundError" || (error as { code?: string })?.code === "P2025")
+      ) {
         throw new NotFoundException("User not found");
       }
-      throw new BadRequestException("Failed to delete user" + error);
+      throw new BadRequestException("Failed to delete user");
     }
   }
 }

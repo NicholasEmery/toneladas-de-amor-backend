@@ -8,25 +8,17 @@ export class CreateDonationService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createDonation(createDonationDto: CreateDonationDto): Promise<Pick<Donation, "id" | "userId">> {
+    const { userId, amount, methodPayment, status, isRecurring } = createDonationDto;
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException("User Not Found");
+    }
+
     try {
-      const { userId, amount, methodPayment, status, isRecurring } = createDonationDto;
-
-      const existingUser = await this.prisma.user.findUnique({
-        where: { id: userId },
-      });
-
-      if (!existingUser) {
-        throw new NotFoundException("User Not Found");
-      }
-
-      const existingDonation = await this.prisma.donation.findUnique({
-        where: { userId },
-      });
-
-      if (existingDonation) {
-        throw new BadRequestException("User already has a donation record.");
-      }
-
       // Validação para doação recorrente
       const { recurringDonation, dateInitiated, dateFinalized } = isRecurring;
 
@@ -110,6 +102,9 @@ export class CreateDonationService {
 
       return donation;
     } catch (error) {
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
+        throw error; // Relança o erro específico já tratado no try
+      }
       throw new BadRequestException("It was not possible to create the donation.");
     }
   }

@@ -28,15 +28,13 @@ export class CreateUserController {
   @HttpCode(201)
   async createUserUpheld(@Body() createUserUpheldDto: CreateUserUpheldDto): Promise<{
     success: string;
-    accessToken: string;
-    refreshToken: string;
+    message: string;
     statusCode: number;
   }> {
-    const user = await this.createUserService.createUserUpheld(createUserUpheldDto);
+    await this.createUserService.createUserUpheld(createUserUpheldDto);
     return {
       success: "Usuário criado com sucesso.",
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken,
+      message: "Verifique o e-mail para ativar a conta.",
       statusCode: 201,
     };
   }
@@ -56,15 +54,13 @@ export class CreateUserController {
   @HttpCode(201)
   async createUserDonator(@Body() createUserDonatorDto: CreateUserDonatorDto): Promise<{
     success: string;
-    accessToken: string;
-    refreshToken: string;
+    message: string;
     statusCode: number;
   }> {
-    const user = await this.createUserService.createUserDonator(createUserDonatorDto);
+    await this.createUserService.createUserDonator(createUserDonatorDto);
     return {
       success: "Usuário criado com sucesso.",
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken,
+      message: "Verifique o e-mail para ativar a conta.",
       statusCode: 201,
     };
   }
@@ -87,15 +83,13 @@ export class CreateUserController {
   @UseGuards(RolesGuard)
   async createUserColaborator(@Body() createUserColaboratorDto: CreateUserColaboratorDto): Promise<{
     success: string;
-    accessToken: string;
-    refreshToken: string;
+    message: string;
     statusCode: number;
   }> {
-    const user = await this.createUserService.createUserColaborator(createUserColaboratorDto);
+    await this.createUserService.createUserColaborator(createUserColaboratorDto);
     return {
       success: "Usuário criado com sucesso.",
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken,
+      message: "Verifique o e-mail para ativar a conta.",
       statusCode: 201,
     };
   }
@@ -111,19 +105,20 @@ export class CreateUserController {
       statusCode: 400,
     },
   })
+  @ApiBearerAuth()
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Post("admin")
   @HttpCode(201)
   async createUserAdmin(@Body() createUserAdminDto: CreateUserAdminDto): Promise<{
     success: string;
-    accessToken: string;
-    refreshToken: string;
+    message: string;
     statusCode: number;
   }> {
-    const user = await this.createUserService.createUserAdmin(createUserAdminDto);
+    await this.createUserService.createUserAdmin(createUserAdminDto);
     return {
       success: "Usuário criado com sucesso.",
-      accessToken: user.accessToken,
-      refreshToken: user.refreshToken,
+      message: "Verifique o e-mail para ativar a conta.",
       statusCode: 201,
     };
   }

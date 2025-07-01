@@ -4,7 +4,6 @@ import { JwtService } from "@nestjs/jwt";
 import { Role } from "@prisma/client";
 import { PrismaService } from "../database/prisma.service";
 import { ROLES_KEY } from "./roles.decorator";
-import { error } from "console";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -24,12 +23,31 @@ export class RolesGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+
     const authHeader = request.headers["authorization"];
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw new UnauthorizedException("Access token is missing");
     }
+
     const accessToken = authHeader.split(" ")[1];
+
+    const decoded = this.jwtService.decode(accessToken);
+
+    if (
+      !decoded ||
+      typeof decoded !== "object" ||
+      !("sub" in decoded) ||
+      !("version" in decoded) ||
+      !("type" in decoded)
+    ) {
+      throw new UnauthorizedException("Invalid access token format");
+    }
+
+    if (decoded.type !== "access") {
+      throw new UnauthorizedException("Invalid token type, please use an access token");
+    }
+
     try {
       const payload = this.jwtService.verify(accessToken);
 

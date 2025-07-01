@@ -17,7 +17,7 @@ export class GetDonationService {
       const { userId } = getDonationDto;
 
       if (userId) {
-        const donation = await this.prisma.donation.findUnique({
+        const donations = await this.prisma.donation.findMany({
           where: { userId },
           select: {
             user: { select: { name: true } },
@@ -29,14 +29,14 @@ export class GetDonationService {
           },
         });
 
-        if (!donation) {
-          throw new NotFoundException("Donation not found");
+        if (!donations) {
+          throw new NotFoundException("User has no donations found");
         }
 
-        return {
+        return donations.map((donation) => ({
           ...donation,
           createdAt: donation.createdAt instanceof Date ? donation.createdAt.toISOString() : donation.createdAt,
-        };
+        }));
       }
 
       const allDonations = await this.prisma.donation.findMany({
@@ -59,6 +59,9 @@ export class GetDonationService {
         createdAt: donation.createdAt instanceof Date ? donation.createdAt.toISOString() : donation.createdAt,
       }));
     } catch (error) {
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
+        throw error; // Relança o erro específico já tratado no try
+      }
       throw new BadRequestException("It was not possible to get the donation.");
     }
   }

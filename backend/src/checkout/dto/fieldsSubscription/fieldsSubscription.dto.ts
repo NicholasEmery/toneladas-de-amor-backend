@@ -26,7 +26,7 @@ export class FieldsSubscriptionDto {
 
   @ApiProperty({
     description: "End date of the subscription in YYYY-MM-DD format.",
-    example: "2024-12-31",
+    example: "2025-08-31",
   })
   @IsString()
   @IsNotEmpty()
@@ -37,7 +37,7 @@ export class FieldsSubscriptionDto {
 
   @ApiProperty({
     description: "Next due date of the subscription in YYYY-MM-DD format.",
-    example: "2024-07-01",
+    example: "2025-06-30",
   })
   @IsString()
   @IsNotEmpty()

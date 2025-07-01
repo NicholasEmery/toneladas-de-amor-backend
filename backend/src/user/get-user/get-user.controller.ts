@@ -28,6 +28,7 @@ export class GetUserController {
     },
   })
   @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get("by-token")
   async getUserByIdToken(@Request() req: { user: { id: string } }): Promise<{
     success: string;

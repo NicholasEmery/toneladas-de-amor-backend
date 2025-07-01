@@ -55,20 +55,37 @@ export class AuthService {
   }
 
   async refreshToken(refresh_token: string): Promise<{ accessToken: string; refreshToken: string }> {
+    const decoded = this.jwtService.decode(refresh_token);
+
+    if (
+      !decoded ||
+      typeof decoded !== "object" ||
+      !("sub" in decoded) ||
+      !("version" in decoded) ||
+      !("type" in decoded)
+    ) {
+      throw new UnauthorizedException("Invalid refresh token format");
+    }
+
+    if (decoded.type !== "refresh") {
+      throw new UnauthorizedException("Invalid token type, please use a valid refresh token");
+    }
+
     try {
       const payload = await this.jwtService.verifyAsync(refresh_token); // Verifica e decodifica o token JWT
 
-      if (payload.type !== "refresh") {
-        throw new UnauthorizedException("Invalid token type, please use a valid refresh token");
-      }
-
-      await this.prisma.user.findUnique({
-        where: { id: payload.sub, tokenVersion: payload.version },
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.sub },
+        select: { id: true, tokenVersion: true },
       });
+
+      if (!user || user.tokenVersion !== payload.version) {
+        throw new Error();
+      }
 
       // Rotaciona o token incrementando a versão
       const updatedUser = await this.prisma.user.update({
-        where: { id: payload.id },
+        where: { id: payload.sub },
         data: { tokenVersion: { increment: 1 } },
         select: { id: true, tokenVersion: true },
       });

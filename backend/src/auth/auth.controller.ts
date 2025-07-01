@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, Post, Headers } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/signIn.dto";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiHeader, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -84,6 +84,11 @@ export class AuthController {
     },
   })
   @ApiBearerAuth()
+  @ApiHeader({
+    name: "authorization",
+    description: "Token JWT no formato Bearer <token>",
+    required: false, // <-- Torna o campo não obrigatório no Swagger
+  })
   async refreshToken(@Headers("authorization") authHeader: string): Promise<{
     message: string;
     access_token: string;

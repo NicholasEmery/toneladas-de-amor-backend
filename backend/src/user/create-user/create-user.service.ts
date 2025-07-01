@@ -14,9 +14,7 @@ export class CreateUserService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
-  async createUserUpheld(
-    createUserUpheldDto: CreateUserUpheldDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async createUserUpheld(createUserUpheldDto: CreateUserUpheldDto): Promise<boolean> {
     const { name, email, password, phone, role, fieldsRole } = createUserUpheldDto;
 
     const existingEmail: boolean = !!(await this.prisma.user.findUnique({
@@ -29,7 +27,7 @@ export class CreateUserService {
 
     const hashedPassword: string = await bcrypt.hash(password, 10);
 
-    const user = await this.prisma.user.create({
+    const user: User = await this.prisma.user.create({
       data: {
         name: name,
         email: email,
@@ -41,32 +39,14 @@ export class CreateUserService {
       },
     });
 
-    const payloadAccess: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "access",
-    };
-    const payloadRefresh: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "refresh",
-    };
-    const access_token = await this.jwtService.signAsync(payloadAccess, {
-      expiresIn: "15m", // Tempo de expiração do access token
-    });
-    const refresh_token = await this.jwtService.signAsync(payloadRefresh, {
-      expiresIn: "7d", // Tempo de expiração do refresh token
-    });
+    if (!user) {
+      throw new BadRequestException("Error creating user");
+    }
 
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
+    return true;
   }
 
-  async createUserDonator(
-    createUserDonatorDto: CreateUserDonatorDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async createUserDonator(createUserDonatorDto: CreateUserDonatorDto): Promise<boolean> {
     const { name, email, password, phone, role, fieldsRole } = createUserDonatorDto;
 
     const existingEmail: boolean = !!(await this.prisma.user.findUnique({
@@ -79,7 +59,7 @@ export class CreateUserService {
 
     const hashedPassword: string = await bcrypt.hash(password, 10);
 
-    const user = await this.prisma.user.create({
+    const user: User = await this.prisma.user.create({
       data: {
         name: name,
         email: email,
@@ -91,85 +71,46 @@ export class CreateUserService {
       },
     });
 
-    const payloadAccess: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "access",
-    };
-    const payloadRefresh: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "refresh",
-    };
-    const access_token: string = await this.jwtService.signAsync(payloadAccess, {
-      expiresIn: "15m", // Tempo de expiração do access token
-    });
-    const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
-      expiresIn: "7d", // Tempo de expiração do refresh token
-    });
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
-  }
-
-  async createUserColaborator(
-    createUserColaboratorDto: CreateUserColaboratorDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    try {
-      const { name, email, password, phone, role, fieldsRole } = createUserColaboratorDto;
-
-      const existingEmail: boolean = !!(await this.prisma.user.findUnique({
-        where: { email: email },
-      }));
-
-      if (existingEmail) {
-        throw new BadRequestException("User already exists");
-      }
-
-      const hashedPassword: string = await bcrypt.hash(password, 10);
-
-      const user: User = await this.prisma.user.create({
-        data: {
-          name: name,
-          email: email,
-          password: hashedPassword,
-          phone: phone,
-          role: role,
-          fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
-          tokenVersion: 1,
-        },
-      });
-
-      const payloadAccess: { sub: string; version: number; type: string } = {
-        sub: user.id,
-        version: user.tokenVersion,
-        type: "access",
-      };
-      const payloadRefresh: { sub: string; version: number; type: string } = {
-        sub: user.id,
-        version: user.tokenVersion,
-        type: "refresh",
-      };
-      const access_token: string = await this.jwtService.signAsync(payloadAccess, {
-        expiresIn: "15m", // Tempo de expiração do access token
-      });
-      const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
-        expiresIn: "7d", // Tempo de expiração do refresh token
-      });
-
-      return {
-        accessToken: access_token,
-        refreshToken: refresh_token,
-      };
-    } catch (error) {
+    if (!user) {
       throw new BadRequestException("Error creating user");
     }
+
+    return true;
   }
 
-  async createUserAdmin(
-    createUserAdminDto: CreateUserAdminDto,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async createUserColaborator(createUserColaboratorDto: CreateUserColaboratorDto): Promise<boolean> {
+    const { name, email, password, phone, role, fieldsRole } = createUserColaboratorDto;
+
+    const existingEmail: boolean = !!(await this.prisma.user.findUnique({
+      where: { email: email },
+    }));
+
+    if (existingEmail) {
+      throw new BadRequestException("User already exists");
+    }
+
+    const hashedPassword: string = await bcrypt.hash(password, 10);
+
+    const user: User = await this.prisma.user.create({
+      data: {
+        name: name,
+        email: email,
+        password: hashedPassword,
+        phone: phone,
+        role: role,
+        fieldsRole: JSON.parse(JSON.stringify(fieldsRole)),
+        tokenVersion: 1,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException("Error creating user");
+    }
+
+    return true;
+  }
+
+  async createUserAdmin(createUserAdminDto: CreateUserAdminDto): Promise<boolean> {
     const { name, email, password, phone, role } = createUserAdminDto;
 
     const existingEmail: boolean = !!(await this.prisma.user.findUnique({
@@ -193,25 +134,10 @@ export class CreateUserService {
       },
     });
 
-    const payloadAccess: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "access",
-    };
-    const payloadRefresh: { sub: string; version: number; type: string } = {
-      sub: user.id,
-      version: user.tokenVersion,
-      type: "refresh",
-    };
-    const access_token: string = await this.jwtService.signAsync(payloadAccess, {
-      expiresIn: "15m", // Tempo de expiração do access token
-    });
-    const refresh_token: string = await this.jwtService.signAsync(payloadRefresh, {
-      expiresIn: "7d", // Tempo de expiração do refresh token
-    });
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
+    if (!user) {
+      throw new BadRequestException("Error creating user");
+    }
+
+    return true;
   }
 }

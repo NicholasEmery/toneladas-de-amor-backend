@@ -1,8 +1,9 @@
-import { Controller, Get, HttpCode, Query } from "@nestjs/common";
+import { Controller, Get, HttpCode, Query, UseGuards } from "@nestjs/common";
 import { GetDonationDto } from "../dto/getDonation/getDonation.dto";
 import { GetDonationService } from "./get-donation.service";
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Donation } from "@prisma/client";
+import { AuthGuard } from "src/auth/auth.guard";
 
 @ApiTags("Donation")
 @Controller("get-donation")
@@ -13,8 +14,10 @@ export class GetDonationController {
     name: "userId",
     required: false,
   })
-  @Get()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @HttpCode(200)
+  @Get()
   async getDonation(@Query() getDonationDto: GetDonationDto): Promise<{
     success: string;
     data:

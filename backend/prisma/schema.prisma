@@ -38,7 +38,7 @@ model User {
   phone         String    @unique
   role          Role
   fieldsRole    Json?
-  donation      Donation?
+  donation      Donation[]
   emailVerified Boolean   @default(false)
   otp           String?
   expiresOtpAt  DateTime?

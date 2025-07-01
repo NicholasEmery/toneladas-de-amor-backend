@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Param } from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Param, Get, HttpCode } from "@nestjs/common";
 import { CheckoutService } from "./checkout.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { ApiBearerAuth, ApiOperation, ApiBody } from "@nestjs/swagger";
@@ -50,7 +50,8 @@ export class CheckoutController {
   }
 
   @UseGuards(AuthGuard)
-  @Post("cancel/payment/:id")
+  @Get("cancel/payment/:id")
+  @HttpCode(200)
   @ApiOperation({ summary: "Cancela um checkout de pagamento" })
   async cancelCheckout(@Param() cancelCheckoutByIdDto: CancelCheckoutByIdDto) {
     const { id } = cancelCheckoutByIdDto;

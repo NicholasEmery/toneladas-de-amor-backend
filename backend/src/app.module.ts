@@ -14,7 +14,6 @@ import { CreateDonationModule } from "./donation/create-donation/create-donation
 import { UpdateDonationModule } from "./donation/update-donation/update-donation.module";
 import { GetDonationModule } from "./donation/get-donation/get-donation.module";
 import { ScheduleModule } from "@nestjs/schedule";
-import { DonationCleanupCronService } from "./donation/donation-cleanup-cron/donation-cleanup-cron.service";
 
 @Module({
   imports: [
@@ -37,6 +36,5 @@ import { DonationCleanupCronService } from "./donation/donation-cleanup-cron/don
     UpdateDonationModule,
     GetDonationModule,
   ],
-  providers: [DonationCleanupCronService],
 })
 export class AppModule {}

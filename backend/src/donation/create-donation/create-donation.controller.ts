@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, Post, UseGuards } from "@nestjs/common";
 import { CreateDonationService } from "./create-donation.service";
 import { CreateDonationDto } from "../dto/createDonation/createDonation.dto";
-import { ApiTags, ApiBody } from "@nestjs/swagger";
+import { ApiTags, ApiBody, ApiBearerAuth } from "@nestjs/swagger";
 import { Donation } from "@prisma/client";
+import { AuthGuard } from "src/auth/auth.guard";
 
 @ApiTags("Donation")
 @Controller("create-donation")
@@ -42,8 +43,10 @@ export class CreateDonationController {
       },
     },
   })
-  @Post("")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @HttpCode(201)
+  @Post()
   async createDonation(
     @Body() createDonationDto: CreateDonationDto,
   ): Promise<{ success: string; data: Pick<Donation, "id" | "userId">; statusCode: number }> {
