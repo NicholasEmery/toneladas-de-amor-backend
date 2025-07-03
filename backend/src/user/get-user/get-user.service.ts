@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { Role } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { PrismaService } from "../../database/prisma.service";
 
 @Injectable()
 export class GetUserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUserById(userId: string) {
+  async getUserById(userId: string): Promise<User> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -27,7 +27,7 @@ export class GetUserService {
     }
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -48,7 +48,7 @@ export class GetUserService {
     }
   }
 
-  async getUserByPhone(phone: string) {
+  async getUserByPhone(phone: string): Promise<User> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -69,7 +69,7 @@ export class GetUserService {
     }
   }
 
-  async getUserByName(name: string) {
+  async getUserByName(name: string): Promise<User> {
     try {
       const user = await this.prisma.user.findFirst({
         where: {
@@ -90,7 +90,7 @@ export class GetUserService {
     }
   }
 
-  async getUserByRole(role: Role) {
+  async getUserByRole(role: Role): Promise<User[]> {
     try {
       const user = await this.prisma.user.findMany({
         where: {
@@ -111,11 +111,19 @@ export class GetUserService {
     }
   }
 
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     try {
       const users = await this.prisma.user.findMany();
+
+      if (!users || users.length === 0) {
+        throw new NotFoundException("No users found");
+      }
+
       return users;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error; // Relança o erro específico já tratado no try
+      }
       throw new BadRequestException("Error fetching all users");
     }
   }

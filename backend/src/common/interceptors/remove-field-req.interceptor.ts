@@ -10,8 +10,17 @@ function removePasswordField(data: unknown, seen: Set<unknown> = new Set()): unk
     if (seen.has(data)) return data; // Evita loop infinito
     seen.add(data);
     const rest: Record<string, unknown> = {};
+    const fieldsToRemove = [
+      "password",
+      "emailVerified",
+      "otp",
+      "expiresOtpAt",
+      "tokenVersion",
+      "createdAt",
+      "updateAt",
+    ];
     for (const key in data) {
-      if (key === "password") continue;
+      if (fieldsToRemove.includes(key)) continue;
       rest[key] = removePasswordField((data as Record<string, unknown>)[key], seen);
     }
     seen.delete(data);

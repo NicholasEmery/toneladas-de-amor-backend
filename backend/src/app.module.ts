@@ -14,6 +14,8 @@ import { CreateDonationModule } from "./donation/create-donation/create-donation
 import { UpdateDonationModule } from "./donation/update-donation/update-donation.module";
 import { GetDonationModule } from "./donation/get-donation/get-donation.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { GetBalanceController } from './get-balance/get-balance.controller';
+import { GetBalanceModule } from './get-balance/get-balance.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { ScheduleModule } from "@nestjs/schedule";
     CreateDonationModule,
     UpdateDonationModule,
     GetDonationModule,
+    GetBalanceModule,
   ],
+  controllers: [GetBalanceController],
 })
 export class AppModule {}

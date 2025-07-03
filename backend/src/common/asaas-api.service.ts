@@ -15,7 +15,7 @@ export class AsaasApiService {
     };
   }
 
-  post<T = unknown, D = object>(endpoint: string, data: D) {
+  post<T = unknown, Data = object>(endpoint: string, data: Data) {
     return this.httpService.post<T>(`${this.baseUrl}${endpoint}`, data, {
       headers: this.getHeaders(),
     });

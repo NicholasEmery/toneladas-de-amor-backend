@@ -3,10 +3,9 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
 import { DatabaseModule } from "../database/database.module";
-import { EmailResetPasswordModule } from "./email-reset-password/email-reset-password.module";
 
 @Module({
-  imports: [DatabaseModule, EmailResetPasswordModule],
+  imports: [DatabaseModule],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard],
   exports: [AuthGuard, AuthService],

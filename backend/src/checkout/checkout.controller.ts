@@ -13,6 +13,7 @@ export class CheckoutController {
 
   @UseGuards(AuthGuard)
   @Post("create/payment/credit-card/detached")
+  @HttpCode(201)
   @ApiOperation({ summary: "Cria um checkout de pagamento" })
   @ApiBody({
     description:
@@ -31,6 +32,7 @@ export class CheckoutController {
 
   @UseGuards(AuthGuard)
   @Post("create/payment/credit-card/recurrence")
+  @HttpCode(201)
   @ApiOperation({
     summary: "Cria um checkout de pagamento recorrente via cartão de crédito",
   })
