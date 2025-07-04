@@ -28,6 +28,7 @@ enum Status {
 
 enum MethodPayment {
   CREDIT_CARD
+  PIX
 }
 
 model User {

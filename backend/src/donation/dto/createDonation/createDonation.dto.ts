@@ -21,7 +21,7 @@ export class CreateDonationDto {
 
   @IsNotEmpty()
   @IsEnum(MethodPayment, {
-    message: "MethodPayment must be one of 'CREDIT_CARD'",
+    message: "MethodPayment must be one of 'CREDIT_CARD' or 'PIX'",
   })
   methodPayment!: MethodPayment;
 

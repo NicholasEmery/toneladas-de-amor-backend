@@ -7,6 +7,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 enum BillingType {
   CREDIT_CARD = "CREDIT_CARD",
+  PIX = "PIX",
 }
 
 enum ChargeType {
@@ -16,7 +17,7 @@ enum ChargeType {
 
 export class CreateCheckoutDetachedDto {
   @ApiProperty({
-    description: "Tipo de cobrança. Atualmente apenas CREDIT_CARD é suportado.",
+    description: "Tipos de cobrança aceitos. Pode ser CREDIT_CARD ou PIX.",
     example: [BillingType.CREDIT_CARD],
     isArray: true,
     enum: BillingType,
