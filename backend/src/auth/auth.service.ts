@@ -15,6 +15,7 @@ export class AuthService {
     access_token: string;
     refresh_token: string;
     user: {
+      id: string;
       name: string;
       role: string;
     };
@@ -51,7 +52,11 @@ export class AuthService {
       expiresIn: "7d", // Tempo de expiração do refresh token
     });
 
-    return { access_token, refresh_token, user: { name: existingUser.name, role: existingUser.role } };
+    return {
+      access_token,
+      refresh_token,
+      user: { id: existingUser.id, name: existingUser.name, role: existingUser.role },
+    };
   }
 
   async refreshToken(refresh_token: string): Promise<{ accessToken: string; refreshToken: string }> {

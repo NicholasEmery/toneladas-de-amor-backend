@@ -45,6 +45,7 @@ export class AuthController {
     access_token: string;
     refresh_token: string;
     user: {
+      id: string;
       name: string;
       role: string;
     };
@@ -53,7 +54,7 @@ export class AuthController {
     const {
       access_token,
       refresh_token,
-      user: { name, role },
+      user: { id, name, role },
     } = await this.authService.signin(signInDto);
 
     return {
@@ -61,6 +62,7 @@ export class AuthController {
       access_token,
       refresh_token,
       user: {
+        id,
         name,
         role,
       },
