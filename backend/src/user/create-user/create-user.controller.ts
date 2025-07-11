@@ -105,9 +105,6 @@ export class CreateUserController {
       statusCode: 400,
     },
   })
-  @ApiBearerAuth()
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
   @Post("admin")
   @HttpCode(201)
   async createUserAdmin(@Body() createUserAdminDto: CreateUserAdminDto): Promise<{
