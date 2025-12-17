@@ -38,8 +38,8 @@ export class MailServiceVerifiedEmail {
       await this.transporter.sendMail(mailOptions);
 
       return true;
-    } catch (error) {
-      throw new Error("Failed to send verification email.");
+    } catch (error: any) {
+      throw new Error("Failed to send verification email. " + error.message);
     }
   }
 }
