@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    container_name: toneladas-de-amor-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=mongodb://mongo:27017/toneladas-de-amor
+      # Defina a URL do frontend em produção, se necessário
+      # - URL_FRONTEND=https://seu-frontend.com
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: toneladas-de-amor-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
